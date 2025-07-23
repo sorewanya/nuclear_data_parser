@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'entities/elements_enum.dart';
 
 ///
 ///файлы mass_1.mas20.txt rct1.mas20.txt rct2_1.mas20.txt nubase_4.mas20.txt находятся по адресу:
@@ -65,13 +66,11 @@ ParsedValue<double?> _parseDouble(String text, [bool nubase = false]) {
 /// Класс для хранения данных об оценке атомных масс из одной строки файла mass.mas20.
 ///
 /// Class for storing atomic mass estimate data from one line of mass.mas20 file.
-class MassAdjustmentEntry {
-  final String rawLine;
+class AME2020Entry {
   final int? nMinusZ;
   final int n;
   final int z;
   final int a;
-  final String elementSymbol;
   final String o;
   final ParsedValue<double?> massExcess;
   final ParsedValue<double?> massExcessUncertainty;
@@ -82,29 +81,62 @@ class MassAdjustmentEntry {
   final ParsedValue<double?> betaDecayEnergyUncertainty;
   final ParsedValue<double?> atomicMassMicroU;
   final ParsedValue<double?> atomicMassUncertaintyMicroU;
+  AME2020Entry.required(
+    this.nMinusZ,
+    this.n,
+    this.z,
+    this.a,
+    this.o,
+    this.massExcess,
+    this.massExcessUncertainty,
+    this.bindingEnergyPerA,
+    this.bindingEnergyPerAUncertainty,
+    this.betaDecayType,
+    this.betaDecayEnergy,
+    this.betaDecayEnergyUncertainty,
+    this.atomicMassMicroU,
+    this.atomicMassUncertaintyMicroU,
+  );
+
+  AME2020Entry._({
+    required this.nMinusZ,
+    required this.n,
+    required this.z,
+    required this.a,
+    required this.o,
+    required this.massExcess,
+    required this.massExcessUncertainty,
+    required this.bindingEnergyPerA,
+    required this.bindingEnergyPerAUncertainty,
+    required this.betaDecayType,
+    required this.betaDecayEnergy,
+    required this.betaDecayEnergyUncertainty,
+    required this.atomicMassMicroU,
+    required this.atomicMassUncertaintyMicroU,
+  });
 
   ///format    :  a1,i3,i5,i5,i5,1x,a3,a4,1x,f14.6,f12.6,f13.5,1x,f10.5,1x,a2,f13.5,f11.5,1x,i3,1x,f13.6,f12.6
   ///             cc NZ  N  Z  A    el  o     mass  unc binding unc      B  beta  unc    atomic_mass   unc
-  MassAdjustmentEntry(this.rawLine)
-    : nMinusZ = int.tryParse(rawLine.safeSubstring(1, 4).trim()),
-      n = int.parse(rawLine.safeSubstring(4, 9).trim()),
-      z = int.parse(rawLine.safeSubstring(9, 14).trim()),
-      a = int.parse(rawLine.safeSubstring(14, 19).trim()),
-      elementSymbol = rawLine.safeSubstring(20, 23).trim(),
-      o: rawLine.safeSubstring(23, 27).trim(),
-      massExcess = _parseDouble(rawLine.safeSubstring(28, 42)),
-      massExcessUncertainty = _parseDouble(rawLine.safeSubstring(42, 54)),
-      bindingEnergyPerA = _parseDouble(rawLine.safeSubstring(54, 67)),
-      bindingEnergyPerAUncertainty = _parseDouble(rawLine.safeSubstring(68, 78)),
-      betaDecayType = rawLine.safeSubstring(79, 81).trim(),
-      betaDecayEnergy = _parseDouble(rawLine.safeSubstring(81, 94)),
-      betaDecayEnergyUncertainty = _parseDouble(rawLine.safeSubstring(94, 105)),
-      atomicMassMicroU = _parseDouble(rawLine.safeSubstring(106, 123).trim()),
-      atomicMassUncertaintyMicroU = _parseDouble(rawLine.safeSubstring(123));
+  factory AME2020Entry.fromLine(String rawLine) => AME2020Entry._(
+    nMinusZ: int.tryParse(rawLine.safeSubstring(1, 4).trim()),
+    n: int.parse(rawLine.safeSubstring(4, 9).trim()),
+    z: int.parse(rawLine.safeSubstring(9, 14).trim()),
+    a: int.parse(rawLine.safeSubstring(14, 19).trim()),
+    o: rawLine.safeSubstring(23, 27).trim(),
+    massExcess: _parseDouble(rawLine.safeSubstring(28, 42)),
+    massExcessUncertainty: _parseDouble(rawLine.safeSubstring(42, 54)),
+    bindingEnergyPerA: _parseDouble(rawLine.safeSubstring(54, 67)),
+    bindingEnergyPerAUncertainty: _parseDouble(rawLine.safeSubstring(68, 78)),
+    betaDecayType: rawLine.safeSubstring(79, 81).trim(),
+    betaDecayEnergy: _parseDouble(rawLine.safeSubstring(81, 94)),
+    betaDecayEnergyUncertainty: _parseDouble(rawLine.safeSubstring(94, 105)),
+    atomicMassMicroU: _parseDouble(rawLine.safeSubstring(106, 123).trim()),
+    atomicMassUncertaintyMicroU: _parseDouble(rawLine.safeSubstring(123)),
+  );
 
   @override
   String toString() {
-    return 'A=$a, Z=$z, El=$elementSymbol, Mass Excess: $massExcess keV, Atomic Mass: $atomicMassMicroU micro-u';
+    return 'A=$a, Z=$z, El=${ElementsEnum.values[z]}, Mass Excess: $massExcess keV, Atomic Mass: $atomicMassMicroU micro-u';
   }
 }
 
