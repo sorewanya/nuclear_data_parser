@@ -72,7 +72,7 @@ class MassAdjustmentEntry {
   final int z;
   final int a;
   final String elementSymbol;
-  final String origin;
+  final String o;
   final ParsedValue<double?> massExcess;
   final ParsedValue<double?> massExcessUncertainty;
   final ParsedValue<double?> bindingEnergyPerA;
@@ -91,7 +91,7 @@ class MassAdjustmentEntry {
       z = int.parse(rawLine.safeSubstring(9, 14).trim()),
       a = int.parse(rawLine.safeSubstring(14, 19).trim()),
       elementSymbol = rawLine.safeSubstring(20, 23).trim(),
-      origin = rawLine.safeSubstring(23, 27).trim(),
+      o: rawLine.safeSubstring(23, 27).trim(),
       massExcess = _parseDouble(rawLine.safeSubstring(28, 42)),
       massExcessUncertainty = _parseDouble(rawLine.safeSubstring(42, 54)),
       bindingEnergyPerA = _parseDouble(rawLine.safeSubstring(54, 67)),
@@ -163,7 +163,7 @@ class NubaseEntry {
   final ParsedValue<double?> massExcessUncertainty;
   final ParsedValue<double?> excitationEnergy;
   final ParsedValue<double?> excitationEnergyUncertainty;
-  final String origin;
+  final String origin; //Origin of Excitation Energy
   final bool stbl; // entry is stable
   final bool pUnst; // entry is p-unst
   final String halfLife;
@@ -496,6 +496,7 @@ void main() {
       if (withUnc) 'Mass_Excess_Unc_Syst(NUBASE)',
       'Exc_Energy_keV',
       if (withUnc) 'Exc_Energy_Unc',
+      'Origin',
       'Stable_Element', 'p-unst', 'HalfLife_Val', 'HalfLife_Unit',
       if (withUnc) 'HalfLife_Unc',
       'HalfLife_Syst', 'Jpi', 'Jpi_Source', 'Isospin', 'Decay_Modes',
@@ -592,6 +593,7 @@ void main() {
       if (withUnc) ..._parsedToCsv(nubaseEntry.massExcessUncertainty),
       ..._parsedToCsv(nubaseEntry.excitationEnergy),
       if (withUnc) ..._parsedToCsv(nubaseEntry.excitationEnergyUncertainty),
+      '"${nubaseEntry.origin}"',
       '"${nubaseEntry.stbl ? "#" : ""}"',
       '"${nubaseEntry.halfLife}"',
       '"${nubaseEntry.halfLifeUnit}"',
