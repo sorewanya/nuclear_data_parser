@@ -186,11 +186,12 @@ class _SpinInfo {
 /// Класс для хранения данных из файла NUBASE2020.
 class NubaseEntry {
   final int a;
+
+  /// Z - протонный номер.
   final int z;
-  final String zzzI; // Original ZZZi string from the file
   final String s; // s column (m, n, p, q, etc.)
+  /// Isomer_Index - i=0 (gs); i=1,2 (isomers); i=3,4 (levels); i=5 (resonance); i=8,9 (IAS)
   final String isomerIndexChar; // The 'i' part of ZZZi
-  final String elementSymbol;
   final ParsedValue<double?> massExcess;
   final ParsedValue<double?> massExcessUncertainty;
   final ParsedValue<double?> excitationEnergy;
@@ -216,10 +217,8 @@ class NubaseEntry {
   NubaseEntry._({
     required this.a,
     required this.z,
-    required this.zzzI,
     required this.s,
     required this.isomerIndexChar,
-    required this.elementSymbol,
     required this.massExcess,
     required this.massExcessUncertainty,
     required this.excitationEnergy,
@@ -238,6 +237,30 @@ class NubaseEntry {
     required this.discoveryYear,
     required this.decayModes,
   });
+  NubaseEntry.required(
+    this.a,
+    this.z,
+    this.s,
+    this.isomerIndexChar,
+    this.stateType,
+    this.massExcess,
+    this.massExcessUncertainty,
+    this.excitationEnergy,
+    this.excitationEnergyUncertainty,
+    this.origin,
+    this.stbl,
+    this.pUnst,
+    this.halfLife,
+    this.isHalfLifeSystematic,
+    this.halfLifeUnit,
+    this.halfLifeUncertainty,
+    this.spinParity,
+    this.spinParitySource,
+    this.isospin,
+    this.ensdfYear,
+    this.discoveryYear,
+    this.decayModes,
+  );
 
   static final _isospinRegex = RegExp(r'T=([\d./\s]+)');
 
@@ -271,10 +294,9 @@ class NubaseEntry {
     return NubaseEntry._(
       a: int.parse(line.safeSubstring(0, 4)),
       z: int.parse(line.safeSubstring(4, 7)),
-      zzzI: zzzi,
       s: line.safeSubstring(16, 17).trim(),
       isomerIndexChar: zzzi.isNotEmpty ? zzzi.substring(zzzi.length - 1) : '',
-      elementSymbol: line.safeSubstring(11, 16).trim().replaceAll(RegExp(r'\d'), ''),
+      // elementSymbol: line.safeSubstring(11, 16).trim().replaceAll(RegExp(r'\d'), ''),
       massExcess: _parseDouble(line.safeSubstring(18, 31).trim()),
       massExcessUncertainty: _parseDouble(line.safeSubstring(31, 42).trim()),
       excitationEnergy: _parseDouble(line.safeSubstring(42, 54).trim()),
@@ -617,7 +639,7 @@ void main() {
       // Nubase
       '"${nubaseEntry.a}"',
       '"${nubaseEntry.z}"',
-      '"${nubaseEntry.elementSymbol}"',
+      '"${ElementsEnum.values[nubaseEntry.z]}"',
       '"${nubaseEntry.isomerIndexChar}"',
       '"${nubaseEntry.s}"',
       '"${nubaseEntry.stateType}"',
