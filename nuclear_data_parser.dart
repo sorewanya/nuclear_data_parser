@@ -44,7 +44,7 @@ class ParsedValue<T> {
 ///
 /// Helper function for parsing numeric values from a file.
 /// Handles values obtained from taxonomy ('#') and missing values ('*').
-ParsedValue<double?> _parseDouble(String text) {
+ParsedValue<double?> _parseDouble(String text, [bool nubase = false]) {
   final trimmed = text.trim();
   if (trimmed.isEmpty || trimmed == '*') {
     return ParsedValue(null, false);
@@ -56,7 +56,9 @@ ParsedValue<double?> _parseDouble(String text) {
   ///
   /// Replace # with . for parsing (# is used in the original file as a replacement for a period for systematic)
   /// and remove non-numeric characters, if any.
-  final parsable = trimmed.replaceAll('#', '.').replaceAll(RegExp(r'[^\d\.\-\+]'), '');
+  final parsable = nubase
+      ? trimmed.replaceAll(RegExp(r'[^\d\.\-\+]'), '')
+      : trimmed.replaceAll('#', '.').replaceAll(RegExp(r'[^\d\.\-\+]'), '');
   return ParsedValue(double.tryParse(parsable), isSystematic);
 }
 
@@ -157,11 +159,13 @@ class NubaseEntry {
   final String s; // s column (m, n, p, q, etc.)
   final String isomerIndexChar; // The 'i' part of ZZZi
   final String elementSymbol;
-  final String massExcess;
-  final String massExcessUncertainty;
-  final String excitationEnergy;
-  final String excitationEnergyUncertainty;
+  final ParsedValue<double?> massExcess;
+  final ParsedValue<double?> massExcessUncertainty;
+  final ParsedValue<double?> excitationEnergy;
+  final ParsedValue<double?> excitationEnergyUncertainty;
   final String origin;
+  final bool stbl; // entry is stable
+  final bool pUnst; // entry is p-unst
   final String halfLife;
   final bool isHalfLifeSystematic;
   final String halfLifeUnit;
@@ -189,6 +193,8 @@ class NubaseEntry {
     required this.excitationEnergy,
     required this.excitationEnergyUncertainty,
     required this.origin,
+    required this.stbl,
+    required this.pUnst,
     required this.halfLife,
     required this.isHalfLifeSystematic,
     required this.halfLifeUnit,
@@ -237,12 +243,14 @@ class NubaseEntry {
       s: line.safeSubstring(16, 17).trim(),
       isomerIndexChar: zzzi.isNotEmpty ? zzzi.substring(zzzi.length - 1) : '',
       elementSymbol: line.safeSubstring(11, 16).trim().replaceAll(RegExp(r'\d'), ''),
-      massExcess: line.safeSubstring(18, 31).trim(),
-      massExcessUncertainty: line.safeSubstring(31, 42).trim(),
-      excitationEnergy: line.safeSubstring(42, 54).trim(),
-      excitationEnergyUncertainty: line.safeSubstring(54, 65).trim(),
+      massExcess: _parseDouble(line.safeSubstring(18, 31).trim()),
+      massExcessUncertainty: _parseDouble(line.safeSubstring(31, 42).trim()),
+      excitationEnergy: _parseDouble(line.safeSubstring(42, 54).trim()),
+      excitationEnergyUncertainty: _parseDouble(line.safeSubstring(54, 65).trim()),
       origin: line.safeSubstring(65, 67).trim(),
-      halfLife: halfLifeSubstring.trim().replaceAll('#', ''),
+      stbl: halfLifeSubstring.contains('stbl'),
+      pUnst: halfLifeSubstring.contains('p-unst'),
+      halfLife: halfLifeSubstring.trim().replaceAll('#', '').replaceAll('stbl', '').replaceAll('p-unst', ''),
       isHalfLifeSystematic: halfLifeSubstring.contains('#'),
       halfLifeUnit: line.safeSubstring(78, 80).trim(),
       halfLifeUncertainty: line.safeSubstring(81, 88).trim(),
@@ -456,9 +464,11 @@ void main() {
 
   // --- 4. Объединение данных и запись в CSV ---
   final outputLines = <String>[];
+  final outputLinesWithoutUnc = <String>[];
   // Заголовок для CSV файла
-  outputLines.add(
-    [
+
+  String getoutputTopic([bool withUnc = true]) {
+    return [
       /// NUBASE
       /// A - массовое число
       /// Z - протонный номер.
@@ -480,9 +490,15 @@ void main() {
       /// Isospin - изоспин
       /// Decay_Modes - моды распада
       /// Discovery_Year - год открытия
-      'A', 'Z', 'Element', 'Isomer_Index', 's', 'StateType', 'Mass_Excess_keV(NUBASE)', 'Mass_Excess_Unc',
-      'Exc_Energy_keV', 'Exc_Energy_Unc', 'HalfLife_Val', 'HalfLife_Unit',
-      'HalfLife_Unc', 'HalfLife_Syst', 'Jpi', 'Jpi_Source', 'Isospin', 'Decay_Modes',
+      'A', 'Z', 'Element', 'Isomer_Index', 's', 'StateType',
+      'Mass_Excess_keV(NUBASE)', 'Mass_Excess_keV_Syst(NUBASE)',
+      if (withUnc) 'Mass_Excess_Unc(NUBASE)',
+      if (withUnc) 'Mass_Excess_Unc_Syst(NUBASE)',
+      'Exc_Energy_keV',
+      if (withUnc) 'Exc_Energy_Unc',
+      'Stable_Element', 'p-unst', 'HalfLife_Val', 'HalfLife_Unit',
+      if (withUnc) 'HalfLife_Unc',
+      'HalfLife_Syst', 'Jpi', 'Jpi_Source', 'Isospin', 'Decay_Modes',
       'Discovery_Year',
 
       /// AME (Atomic Mass Evaluation)
@@ -496,13 +512,17 @@ void main() {
       /// Binding_Energy_per_A_Unc_Syst - флаг систематической неопределенности энергии связи на нуклон (#)
       /// Beta_Decay_Energy_keV - энергия
       'Mass_Excess_keV(AME)', 'Mass_Excess_Syst(AME)',
-      'Mass_Excess_Unc(AME)', 'Mass_Excess_Unc_Syst(AME)',
+      if (withUnc) 'Mass_Excess_Unc(AME)',
+      if (withUnc) 'Mass_Excess_Unc_Syst(AME)',
       'Binding_Energy_per_A_keV', 'Binding_Energy_per_A_Syst',
-      'Binding_Energy_per_A_Unc', 'Binding_Energy_per_A_Unc_Syst',
+      if (withUnc) 'Binding_Energy_per_A_Unc',
+      if (withUnc) 'Binding_Energy_per_A_Unc_Syst',
       'Beta_Decay_Energy_keV', 'Beta_Decay_Energy_Syst',
-      'Beta_Decay_Energy_Unc', 'Beta_Decay_Energy_Unc_Syst',
-      'Atomic_Mass_microU', 'Atomic_Mass_Syst', 'Atomic_Mass_Unc_microU',
-      'Atomic_Mass_Unc_Syst',
+      if (withUnc) 'Beta_Decay_Energy_Unc',
+      if (withUnc) 'Beta_Decay_Energy_Unc_Syst',
+      'Atomic_Mass_microU', 'Atomic_Mass_Syst',
+      if (withUnc) 'Atomic_Mass_Unc_microU',
+      if (withUnc) 'Atomic_Mass_Unc_Syst',
 
       /// RCT1
       /// S(n) — энергия разделения нейтрона (Neutron Separation Energy).
@@ -511,50 +531,56 @@ void main() {
       /// Q(d,a) — Q-значение для реакции (d,α).
       /// Q(p,a) — Q-значение для реакции (p,α).
       /// Q(n,a) — Q-значение для реакции (n,α).
-      'S2n', 'S2n_Syst', 'S2n_Unc', 'S2n_Unc_Syst', 'S2p', 'S2p_Syst',
-      'S2p_Unc', 'S2p_Unc_Syst', 'Qa', 'Qa_Syst', 'Qa_Unc', 'Qa_Unc_Syst',
-      'Q2b', 'Q2b_Syst', 'Q2b_Unc', 'Q2b_Unc_Syst', 'Qep', 'Qep_Syst',
-      'Qep_Unc', 'Qep_Unc_Syst', 'Qbn', 'Qbn_Syst', 'Qbn_Unc', 'Qbn_Unc_Syst',
+      'S2n', 'S2n_Syst',
+      if (withUnc) 'S2n_Unc',
+      if (withUnc) 'S2n_Unc_Syst',
+      'S2p', 'S2p_Syst',
+      if (withUnc) 'S2p_Unc',
+      if (withUnc) 'S2p_Unc_Syst',
+      'Qa', 'Qa_Syst',
+      if (withUnc) 'Qa_Unc',
+      if (withUnc) 'Qa_Unc_Syst',
+      'Q2b', 'Q2b_Syst',
+      if (withUnc) 'Q2b_Unc',
+      if (withUnc) 'Q2b_Unc_Syst',
+      'Qep', 'Qep_Syst',
+      if (withUnc) 'Qep_Unc',
+      if (withUnc) 'Qep_Unc_Syst',
+      'Qbn', 'Qbn_Syst',
+      if (withUnc) 'Qbn_Unc',
+      if (withUnc) 'Qbn_Unc_Syst',
 
       /// RCT2
-      'Sn', 'Sn_Syst', 'Sn_Unc', 'Sn_Unc_Syst', 'Sp', 'Sp_Syst', 'Sp_Unc',
-      'Sp_Unc_Syst', 'Q4b', 'Q4b_Syst', 'Q4b_Unc', 'Q4b_Unc_Syst', 'Qda',
-      'Qda_Syst', 'Qda_Unc', 'Qda_Unc_Syst', 'Qpa', 'Qpa_Syst', 'Qpa_Unc',
-      'Qpa_Unc_Syst', 'Qna', 'Qna_Syst', 'Qna_Unc', 'Qna_Unc_Syst',
-    ].join(','),
-  );
-  final outputLinesWithoutUnc = <String>[];
-  // сокращённая версия, без unc
-  outputLinesWithoutUnc.add(
-    [
-      /// NUBASE
-      'A', 'Z', 'Element', 'Isomer_Index', 's', 'StateType', 'Mass_Excess_keV(NUBASE)',
-      'Exc_Energy_keV', 'HalfLife_Val', 'HalfLife_Unit',
-      'HalfLife_Syst', 'Jpi', 'Jpi_Source', 'Isospin', 'Decay_Modes',
-      'Discovery_Year',
+      'Sn', 'Sn_Syst',
+      if (withUnc) 'Sn_Unc',
+      if (withUnc) 'Sn_Unc_Syst',
+      'Sp', 'Sp_Syst',
+      if (withUnc) 'Sp_Unc',
+      if (withUnc) 'Sp_Unc_Syst',
+      'Q4b', 'Q4b_Syst',
+      if (withUnc) 'Q4b_Unc',
+      if (withUnc) 'Q4b_Unc_Syst',
+      'Qda', 'Qda_Syst',
+      if (withUnc) 'Qda_Unc',
+      if (withUnc) 'Qda_Unc_Syst',
+      'Qpa', 'Qpa_Syst',
+      if (withUnc) 'Qpa_Unc',
+      if (withUnc) 'Qpa_Unc_Syst',
+      'Qna', 'Qna_Syst',
+      if (withUnc) 'Qna_Unc',
+      if (withUnc) 'Qna_Unc_Syst',
+    ].join(',');
+  }
 
-      /// AME (Atomic Mass Evaluation)
-      'Mass_Excess_keV(AME)', 'Mass_Excess_Syst(AME)',
-      'Binding_Energy_per_A_keV', 'Binding_Energy_per_A_Syst',
-      'Beta_Decay_Energy_keV', 'Beta_Decay_Energy_Syst',
-      'Atomic_Mass_microU', 'Atomic_Mass_Syst',
-
-      /// RCT1
-      'S2n', 'S2n_Syst', 'S2p', 'S2p_Syst', 'Qa', 'Qa_Syst',
-      'Q2b', 'Q2b_Syst', 'Qep', 'Qep_Syst', 'Qbn', 'Qbn_Syst',
-
-      /// RCT2
-      'Sn', 'Sn_Syst', 'Sp', 'Sp_Syst', 'Q4b', 'Q4b_Syst',
-      'Qda', 'Qda_Syst', 'Qpa', 'Qpa_Syst', 'Qna', 'Qna_Syst',
-    ].join(','),
-  );
+  outputLines.add(getoutputTopic());
+  outputLinesWithoutUnc.add(getoutputTopic(false));
 
   for (final nubaseEntry in nubaseEntries) {
     final key = nubaseEntry.ameKey;
     final ameEntry = nubaseEntry.isomerIndexChar == "0" ? ameDataMap[key] : null;
     final rctEntry = nubaseEntry.isomerIndexChar == "0" ? reactionDataMap[key] : null;
 
-    final csvRow = [
+    String getRow([bool withUnc = true]) => [
       // Nubase
       '"${nubaseEntry.a}"',
       '"${nubaseEntry.z}"',
@@ -562,13 +588,14 @@ void main() {
       '"${nubaseEntry.isomerIndexChar}"',
       '"${nubaseEntry.s}"',
       '"${nubaseEntry.stateType}"',
-      '"${nubaseEntry.massExcess}"',
-      '"${nubaseEntry.massExcessUncertainty}"',
-      '"${nubaseEntry.excitationEnergy}"',
-      '"${nubaseEntry.excitationEnergyUncertainty}"',
+      ..._parsedToCsv(nubaseEntry.massExcess),
+      if (withUnc) ..._parsedToCsv(nubaseEntry.massExcessUncertainty),
+      ..._parsedToCsv(nubaseEntry.excitationEnergy),
+      if (withUnc) ..._parsedToCsv(nubaseEntry.excitationEnergyUncertainty),
+      '"${nubaseEntry.stbl ? "#" : ""}"',
       '"${nubaseEntry.halfLife}"',
       '"${nubaseEntry.halfLifeUnit}"',
-      '"${nubaseEntry.halfLifeUncertainty}"',
+      if (withUnc) '"${nubaseEntry.halfLifeUncertainty}"',
       nubaseEntry.isHalfLifeSystematic ? '"#"' : '""',
       '"${nubaseEntry.spinParity}"',
       '"${nubaseEntry.spinParitySource}"',
@@ -577,84 +604,46 @@ void main() {
       '"${nubaseEntry.discoveryYear}"',
       // AME
       ..._parsedToCsv(ameEntry?.massExcess),
-      ..._parsedToCsv(ameEntry?.massExcessUncertainty),
+      if (withUnc) ..._parsedToCsv(ameEntry?.massExcessUncertainty),
       ..._parsedToCsv(ameEntry?.bindingEnergyPerA),
-      ..._parsedToCsv(ameEntry?.bindingEnergyPerAUncertainty),
+      if (withUnc) ..._parsedToCsv(ameEntry?.bindingEnergyPerAUncertainty),
       ..._parsedToCsv(ameEntry?.betaDecayEnergy),
-      ..._parsedToCsv(ameEntry?.betaDecayEnergyUncertainty),
+      if (withUnc) ..._parsedToCsv(ameEntry?.betaDecayEnergyUncertainty),
       ..._parsedToCsv(ameEntry?.atomicMassMicroU),
-      ..._parsedToCsv(ameEntry?.atomicMassUncertaintyMicroU),
+      if (withUnc) ..._parsedToCsv(ameEntry?.atomicMassUncertaintyMicroU),
       // RCT1
       ..._parsedToCsv(rctEntry?.s2n),
-      ..._parsedToCsv(rctEntry?.s2nUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.s2nUncertainty),
       ..._parsedToCsv(rctEntry?.s2p),
-      ..._parsedToCsv(rctEntry?.s2pUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.s2pUncertainty),
       ..._parsedToCsv(rctEntry?.qa),
-      ..._parsedToCsv(rctEntry?.qaUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.qaUncertainty),
       ..._parsedToCsv(rctEntry?.q2b),
-      ..._parsedToCsv(rctEntry?.q2bUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.q2bUncertainty),
       ..._parsedToCsv(rctEntry?.qep),
-      ..._parsedToCsv(rctEntry?.qepUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.qepUncertainty),
       ..._parsedToCsv(rctEntry?.qbn),
-      ..._parsedToCsv(rctEntry?.qbnUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.qbnUncertainty),
       // RCT2
       ..._parsedToCsv(rctEntry?.sn),
-      ..._parsedToCsv(rctEntry?.snUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.snUncertainty),
       ..._parsedToCsv(rctEntry?.sp),
-      ..._parsedToCsv(rctEntry?.spUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.spUncertainty),
       ..._parsedToCsv(rctEntry?.q4b),
-      ..._parsedToCsv(rctEntry?.q4bUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.q4bUncertainty),
       ..._parsedToCsv(rctEntry?.qda),
-      ..._parsedToCsv(rctEntry?.qdaUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.qdaUncertainty),
       ..._parsedToCsv(rctEntry?.qpa),
-      ..._parsedToCsv(rctEntry?.qpaUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.qpaUncertainty),
       ..._parsedToCsv(rctEntry?.qna),
-      ..._parsedToCsv(rctEntry?.qnaUncertainty),
+      if (withUnc) ..._parsedToCsv(rctEntry?.qnaUncertainty),
     ].join(',');
-    outputLines.add(csvRow);
-    final csvWithoutUncRow = [
-      // Nubase
-      '"${nubaseEntry.a}"',
-      '"${nubaseEntry.z}"',
-      '"${nubaseEntry.elementSymbol}"',
-      '"${nubaseEntry.isomerIndexChar}"',
-      '"${nubaseEntry.s}"',
-      '"${nubaseEntry.stateType}"',
-      '"${nubaseEntry.massExcess}"',
-      '"${nubaseEntry.excitationEnergy}"',
-      '"${nubaseEntry.halfLife}"',
-      '"${nubaseEntry.halfLifeUnit}"',
-      nubaseEntry.isHalfLifeSystematic ? '"#"' : '""',
-      '"${nubaseEntry.spinParity}"',
-      '"${nubaseEntry.spinParitySource}"',
-      '"${nubaseEntry.isospin}"',
-      '"${nubaseEntry.decayModes}"',
-      '"${nubaseEntry.discoveryYear}"',
-      // AME
-      ..._parsedToCsv(ameEntry?.massExcess),
-      ..._parsedToCsv(ameEntry?.bindingEnergyPerA),
-      ..._parsedToCsv(ameEntry?.betaDecayEnergy),
-      ..._parsedToCsv(ameEntry?.atomicMassMicroU),
-      // RCT1
-      ..._parsedToCsv(rctEntry?.s2n),
-      ..._parsedToCsv(rctEntry?.s2p),
-      ..._parsedToCsv(rctEntry?.qa),
-      ..._parsedToCsv(rctEntry?.q2b),
-      ..._parsedToCsv(rctEntry?.qep),
-      ..._parsedToCsv(rctEntry?.qbn),
-      // RCT2
-      ..._parsedToCsv(rctEntry?.sn),
-      ..._parsedToCsv(rctEntry?.sp),
-      ..._parsedToCsv(rctEntry?.q4b),
-      ..._parsedToCsv(rctEntry?.qda),
-      ..._parsedToCsv(rctEntry?.qpa),
-      ..._parsedToCsv(rctEntry?.qna),
-    ].join(',');
-    outputLinesWithoutUnc.add(csvWithoutUncRow);
+    outputLines.add(getRow());
+    outputLinesWithoutUnc.add(getRow(false));
   }
 
   outputFile.writeAsStringSync(outputLines.join('\n'));
   outputFileWithoutUnc.writeAsStringSync(outputLinesWithoutUnc.join('\n'));
 
-  print('Обработка завершена. Результат записан в файл: ${outputFile.path}');
+  print('Обработка завершена. Результат записан в файлы: ${outputFile.path}, ${outputFileWithoutUnc.path}');
 }
