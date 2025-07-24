@@ -89,6 +89,7 @@ void main() {
     "// dart format width=9999",
     "import './entities/parsed_value.dart';",
     "import './entities/nubase_entity.dart';",
+    "import './entities/nuclide_state_type_enum.dart';",
     "\nList<NubaseEntry> nubaseList=[",
   ];
   final outputLinesDartAme = <String>[
@@ -220,7 +221,7 @@ void main() {
       '"${ElementsEnum.values[nubaseEntry.z]}"',
       '"${nubaseEntry.isomerIndexChar}"',
       '"${nubaseEntry.s}"',
-      '"${nubaseEntry.stateType}"',
+      '"${nubaseEntry.stateType.name}"',
       ...parsedToCsv(nubaseEntry.massExcess),
       if (withUnc) ...parsedToCsv(nubaseEntry.massExcessUncertainty),
       ...parsedToCsv(nubaseEntry.excitationEnergy),
@@ -280,7 +281,7 @@ void main() {
       '${nubaseEntry.z},'
       '"${nubaseEntry.s}",'
       '"${nubaseEntry.isomerIndexChar}",'
-      '"${nubaseEntry.stateType}",'
+      '${nubaseEntry.stateType},'
       '${parsedToDart(nubaseEntry.massExcess)},'
       '${parsedToDart(nubaseEntry.massExcessUncertainty)},'
       '${parsedToDart(nubaseEntry.excitationEnergy)},'

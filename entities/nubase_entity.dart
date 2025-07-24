@@ -1,3 +1,4 @@
+import 'nuclide_state_type_enum.dart';
 import 'parsed_value.dart';
 
 /// Класс для хранения данных из файла NUBASE2020.
@@ -29,7 +30,7 @@ class NubaseEntry {
   final String decayModes;
 
   // This field will be populated after parsing, using context from other nuclides.
-  String stateType = 'UNKNOWN';
+  NuclideStateTypeEnum stateType = NuclideStateTypeEnum.UNKNOWN;
 
   // Приватный конструктор для использования с factory.
   NubaseEntry({
