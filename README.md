@@ -1,4 +1,4 @@
-# Nuclear Data Parser to CSV
+# Nuclear Data Parser to CSV and dart classes
 
 A Dart script for parsing and combining nuclear data from AME (Atomic Mass Evaluation), NUBASE, and reaction data files into a unified CSV format.
 
@@ -29,7 +29,7 @@ files mass_1.mas20.txt rct1.mas20.txt rct2_1.mas20.txt nubase_4.mas20.txt:
 
 ## Usage
 
-1. Place input files in the specified directory:
+1. Place input files(from [https://www-nds.iaea.org/amdc/]) in the specified directory:
    - `mass_1.mas20.txt`
    - `rct1.mas20.txt` 
    - `rct2_1.mas20.txt`
@@ -39,7 +39,11 @@ files mass_1.mas20.txt rct1.mas20.txt rct2_1.mas20.txt nubase_4.mas20.txt:
 ```
 dart mass_adjustment_convert.dart
 ```
-3. Output will be saved to nubase_ame_rct_combined.csv and nubase_ame_rct_combined_without_Unc.csv
+3. Output will be saved to 
+  - csv files: nubase_ame_rct_combined.csv and nubase_ame_rct_combined_without_Unc.csv
+  - dart files: nubase.dart, ame.dart, rct.dart 
+
+4. If you want to use dart files don't forget get classes from `entities` directory
 
 ## Output Columns
 The CSV contains all data from input files:
