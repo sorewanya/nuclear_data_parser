@@ -15,16 +15,19 @@ import 'utils/reaction_parser.dart';
 ///
 ///
 
-void main() {
+void main() async {
   final massFile = File('mass_1.mas20.txt');
   final rct1File = File('rct1.mas20.txt');
   final rct2File = File('rct2_1.mas20.txt');
   final nubaseFile = File('nubase_4.mas20.txt');
-  final outputFile = File('nubase_ame_rct_combined.csv');
-  final outputFileWithoutUnc = File('nubase_ame_rct_combined_without_Unc.csv');
-  final outputDartNubase = File('nubase.dart');
-  final outputDartAme = File('ame.dart');
-  final outputDartRct = File('rct.dart');
+  final outputFile = File('output/csv/nubase_ame_rct_combined.csv');
+  final outputFileWithoutUnc = File('output/csv/nubase_ame_rct_combined_without_Unc.csv');
+  final outputDartNubase = File('output/dart/nubase.dart');
+  final outputDartAme = File('output/dart/ame.dart');
+  final outputDartRct = File('output/dart/rct.dart');
+
+  await Directory('output/csv').create(recursive: true);
+  await Directory('output/dart').create(recursive: true);
 
   // --- 1. Парсинг данных AME о массах ---
   final ameDataMap = <String, AME2020Entry>{};
@@ -87,21 +90,21 @@ void main() {
   final outputLinesWithoutUnc = <String>[];
   final outputLinesDartNubase = <String>[
     "// dart format width=9999",
-    "import './entities/parsed_value.dart';",
-    "import './entities/nubase_entity.dart';",
-    "import './entities/nuclide_state_type_enum.dart';",
+    "import '../../entities/parsed_value.dart';",
+    "import '../../entities/nubase_entity.dart';",
+    "import '../../entities/nuclide_state_type_enum.dart';",
     "\nList<NubaseEntry> nubaseList=[",
   ];
   final outputLinesDartAme = <String>[
     "// dart format width=9999",
-    "import './entities/parsed_value.dart';",
-    "import './entities/ame2020_entity.dart';",
+    "import '../../entities/parsed_value.dart';",
+    "import '../../entities/ame2020_entity.dart';",
     "\nList<AME2020Entry> ame2020List=[",
   ];
   final outputLinesDartRct = <String>[
     "// dart format width=9999",
-    "import './entities/parsed_value.dart';",
-    "import './entities/reaction_data_entity.dart';",
+    "import '../../entities/parsed_value.dart';",
+    "import '../../entities/reaction_data_entity.dart';",
     "\nList<ReactionDataEntry> rctList=[",
   ];
   // Заголовок для CSV файла
