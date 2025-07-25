@@ -28,8 +28,13 @@ void main() async {
   final outputDartAme = File('output/dart/ame.dart');
   final outputDartRct = File('output/dart/rct.dart');
 
+  final outputCppNubase = File('output/cpp/nubase.h');
+  final outputCppAme = File('output/cpp/ame.h');
+  final outputCppRct = File('output/cpp/rct.h');
+
   await Directory('output/csv').create(recursive: true);
   await Directory('output/dart').create(recursive: true);
+  await Directory('output/cpp').create(recursive: true);
 
   // --- 1. Парсинг данных AME о массах ---
   final ameDataMap = <String, AME2020Entry>{};
@@ -108,6 +113,21 @@ void main() async {
     "import '../../entities/parsed_value.dart';",
     "import '../../entities/reaction_data_entity.dart';",
     "\nList<ReactionDataEntry> rctList=[",
+  ];
+  final outputLinesCppNubase = <String>[
+    "#include <vector>",
+    "#include <NubaseEntry.h>",
+    "\nstd::vector<NubaseEntry> nubaseList={",
+  ];
+  final outputLinesCppAme = <String>[
+    "#include <vector>",
+    "#include <AME2020Entry.h>",
+    "\nstd::vector<AME2020Entry> ame2020List={",
+  ];
+  final outputLinesCppRct = <String>[
+    "#include <vector>",
+    "#include <ReactionDataEntry.h>",
+    "\nstd::vector<ReactionDataEntry> rctList={",
   ];
 
   /// Заголовок для CSV файла
@@ -359,16 +379,102 @@ void main() async {
         '${parsedToDart(rctEntry.qnaUncertainty)}'
         '),',
       );
+
+    ///Cpp
+    outputLinesCppNubase.add(
+      'NubaseEntry('
+      '${nubaseEntry.a},'
+      '${nubaseEntry.z},'
+      '"${nubaseEntry.s}",'
+      '${nubaseEntry.isomerIndex},'
+      '${nubaseEntry.stateType.toString().replaceFirst(".", "::")},'
+      '${parsedToCpp(nubaseEntry.massExcess)},'
+      '${parsedToCpp(nubaseEntry.massExcessUncertainty)},'
+      '${parsedToCpp(nubaseEntry.excitationEnergy)},'
+      '${parsedToCpp(nubaseEntry.excitationEnergyUncertainty)},'
+      '"${nubaseEntry.origin}",'
+      '${nubaseEntry.stbl},'
+      '${nubaseEntry.pUnst},'
+      '"${nubaseEntry.halfLife}",'
+      '${nubaseEntry.isHalfLifeSystematic},'
+      '"${nubaseEntry.halfLifeUnit}",'
+      '"${nubaseEntry.halfLifeUncertainty}",'
+      '"${nubaseEntry.spinParity}",'
+      '"${nubaseEntry.spinParitySource}",'
+      '"${nubaseEntry.isospin}",'
+      '"${nubaseEntry.ensdfYear}",'
+      '"${nubaseEntry.discoveryYear}",'
+      '"${nubaseEntry.decayModes}"'
+      '),',
+    );
+    if (ameEntry != null)
+      outputLinesCppAme.add(
+        'AME2020Entry('
+        '${ameEntry.nMinusZ},'
+        '${ameEntry.n},'
+        '${ameEntry.z},'
+        '${ameEntry.a},'
+        '"${ameEntry.o}",'
+        "${parsedToCpp(ameEntry.massExcess)},"
+        "${parsedToCpp(ameEntry.massExcessUncertainty)},"
+        "${parsedToCpp(ameEntry.bindingEnergyPerA)},"
+        "${parsedToCpp(ameEntry.bindingEnergyPerAUncertainty)},"
+        '"${ameEntry.betaDecayType}",'
+        "${parsedToCpp(ameEntry.betaDecayEnergy)},"
+        "${parsedToCpp(ameEntry.betaDecayEnergyUncertainty)},"
+        "${parsedToCpp(ameEntry.atomicMassMicroU)},"
+        "${parsedToCpp(ameEntry.atomicMassUncertaintyMicroU)}"
+        '),',
+      );
+    if (rctEntry != null)
+      outputLinesCppRct.add(
+        'ReactionDataEntry('
+        '${nubaseEntry.a},'
+        '${nubaseEntry.z},'
+        '${parsedToCpp(rctEntry.s2n)},'
+        '${parsedToCpp(rctEntry.s2nUncertainty)},'
+        '${parsedToCpp(rctEntry.s2p)},'
+        '${parsedToCpp(rctEntry.s2pUncertainty)},'
+        '${parsedToCpp(rctEntry.qa)},'
+        '${parsedToCpp(rctEntry.qaUncertainty)},'
+        '${parsedToCpp(rctEntry.q2b)},'
+        '${parsedToCpp(rctEntry.q2bUncertainty)},'
+        '${parsedToCpp(rctEntry.qep)},'
+        '${parsedToCpp(rctEntry.qepUncertainty)},'
+        '${parsedToCpp(rctEntry.qbn)},'
+        '${parsedToCpp(rctEntry.qbnUncertainty)},'
+        '${parsedToCpp(rctEntry.sn)},'
+        '${parsedToCpp(rctEntry.snUncertainty)},'
+        '${parsedToCpp(rctEntry.sp)},'
+        '${parsedToCpp(rctEntry.spUncertainty)},'
+        '${parsedToCpp(rctEntry.q4b)},'
+        '${parsedToCpp(rctEntry.q4bUncertainty)},'
+        '${parsedToCpp(rctEntry.qda)},'
+        '${parsedToCpp(rctEntry.qdaUncertainty)},'
+        '${parsedToCpp(rctEntry.qpa)},'
+        '${parsedToCpp(rctEntry.qpaUncertainty)},'
+        '${parsedToCpp(rctEntry.qna)},'
+        '${parsedToCpp(rctEntry.qnaUncertainty)}'
+        '),',
+      );
   }
   outputLinesDartNubase.add("];");
   outputLinesDartAme.add("];");
   outputLinesDartRct.add("];");
+
+  outputLinesCppNubase.add("};");
+  outputLinesCppAme.add("};");
+  outputLinesCppRct.add("};");
 
   outputFile.writeAsStringSync(outputLines.join('\n'));
   outputFileWithoutUnc.writeAsStringSync(outputLinesWithoutUnc.join('\n'));
   outputDartNubase.writeAsStringSync(outputLinesDartNubase.join('\n'));
   outputDartAme.writeAsStringSync(outputLinesDartAme.join('\n'));
   outputDartRct.writeAsStringSync(outputLinesDartRct.join('\n'));
+
+  outputCppNubase.writeAsStringSync(outputLinesCppNubase.join('\n'));
+  outputCppAme.writeAsStringSync(outputLinesCppAme.join('\n'));
+  outputCppRct.writeAsStringSync(outputLinesCppRct.join('\n'));
 
   print('Обработка завершена. Результат записан в файлы: ${outputFile.path}, ${outputFileWithoutUnc.path}');
 }

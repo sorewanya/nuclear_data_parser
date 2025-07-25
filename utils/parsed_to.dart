@@ -10,3 +10,8 @@ String parsedToDart(ParsedValue<double?>? pv) {
   if (pv == null) return 'ParsedValue<double?>(null,false)';
   return 'ParsedValue<double?>(${pv.value?.toString() ?? "null"},${pv.isSystematic})';
 }
+
+String parsedToCpp(ParsedValue<double?>? pv) {
+  if (pv == null) return 'ParsedValue<std::optional<double>>(std::nullopt,false)';
+  return 'ParsedValue<std::optional<double>>(${pv.value?.toString() ?? "std::nullopt"},${pv.isSystematic})';
+}
