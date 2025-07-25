@@ -32,7 +32,6 @@ class NubaseEntry {
   // This field will be populated after parsing, using context from other nuclides.
   NuclideStateTypeEnum stateType = NuclideStateTypeEnum.UNKNOWN;
 
-  // Приватный конструктор для использования с factory.
   NubaseEntry({
     required this.a,
     required this.z,
