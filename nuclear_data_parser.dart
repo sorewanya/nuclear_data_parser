@@ -20,8 +20,10 @@ void main() async {
   final rct1File = File('rct1.mas20.txt');
   final rct2File = File('rct2_1.mas20.txt');
   final nubaseFile = File('nubase_4.mas20.txt');
+
   final outputFile = File('output/csv/nubase_ame_rct_combined.csv');
   final outputFileWithoutUnc = File('output/csv/nubase_ame_rct_combined_without_Unc.csv');
+
   final outputDartNubase = File('output/dart/nubase.dart');
   final outputDartAme = File('output/dart/ame.dart');
   final outputDartRct = File('output/dart/rct.dart');
@@ -70,7 +72,7 @@ void main() async {
     int isomerCount = 0;
     for (final entry in entries) {
       // 'm', 'n' в колонке 's' или '1', '2' в 'i' части ZZZi считаются "классическими" изомерами
-      if (entry.s == 'm' || entry.s == 'n' || entry.isomerIndexChar == '1' || entry.isomerIndexChar == '2') {
+      if (entry.s == 'm' || entry.s == 'n' || entry.isomerIndex == 1 || entry.isomerIndex == 2) {
         isomerCount++;
       }
     }
@@ -107,9 +109,9 @@ void main() async {
     "import '../../entities/reaction_data_entity.dart';",
     "\nList<ReactionDataEntry> rctList=[",
   ];
-  // Заголовок для CSV файла
 
-  String getoutputTopic([bool withUnc = true]) {
+  /// Заголовок для CSV файла
+  String getcsvOutputTopic([bool withUnc = true]) {
     return [
       /// NUBASE
       /// A - массовое число
@@ -209,20 +211,21 @@ void main() async {
     ].join(',');
   }
 
-  outputLines.add(getoutputTopic());
-  outputLinesWithoutUnc.add(getoutputTopic(false));
+  outputLines.add(getcsvOutputTopic());
+  outputLinesWithoutUnc.add(getcsvOutputTopic(false));
 
   for (final nubaseEntry in nubaseEntries) {
     final key = nubaseEntry.ameKey;
-    final ameEntry = nubaseEntry.isomerIndexChar == "0" ? ameDataMap[key] : null;
-    final rctEntry = nubaseEntry.isomerIndexChar == "0" ? reactionDataMap[key] : null;
+    final ameEntry = nubaseEntry.isomerIndex == 0 ? ameDataMap[key] : null;
+    final rctEntry = nubaseEntry.isomerIndex == 0 ? reactionDataMap[key] : null;
 
+    ///CSV
     String getRow([bool withUnc = true]) => [
       // Nubase
       '"${nubaseEntry.a}"',
       '"${nubaseEntry.z}"',
       '"${ElementsEnum.values[nubaseEntry.z]}"',
-      '"${nubaseEntry.isomerIndexChar}"',
+      '"${nubaseEntry.isomerIndex}"',
       '"${nubaseEntry.s}"',
       '"${nubaseEntry.stateType.name}"',
       ...parsedToCsv(nubaseEntry.massExcess),
@@ -278,12 +281,14 @@ void main() async {
     ].join(',');
     outputLines.add(getRow());
     outputLinesWithoutUnc.add(getRow(false));
+
+    ///Dart
     outputLinesDartNubase.add(
       'NubaseEntry.required('
       '${nubaseEntry.a},'
       '${nubaseEntry.z},'
       '"${nubaseEntry.s}",'
-      '"${nubaseEntry.isomerIndexChar}",'
+      '${nubaseEntry.isomerIndex},'
       '${nubaseEntry.stateType},'
       '${parsedToDart(nubaseEntry.massExcess)},'
       '${parsedToDart(nubaseEntry.massExcessUncertainty)},'

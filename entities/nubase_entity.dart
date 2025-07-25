@@ -10,7 +10,7 @@ class NubaseEntry {
   final int z;
   final String s; // s column (m, n, p, q, etc.)
   /// Isomer_Index - i=0 (gs); i=1,2 (isomers); i=3,4 (levels); i=5 (resonance); i=8,9 (IAS)
-  final String isomerIndexChar; // The 'i' part of ZZZi
+  final int isomerIndex; // The 'i' part of ZZZi
   final ParsedValue<double?> massExcess;
   final ParsedValue<double?> massExcessUncertainty;
   final ParsedValue<double?> excitationEnergy;
@@ -36,7 +36,7 @@ class NubaseEntry {
     required this.a,
     required this.z,
     required this.s,
-    required this.isomerIndexChar,
+    required this.isomerIndex,
     required this.massExcess,
     required this.massExcessUncertainty,
     required this.excitationEnergy,
@@ -59,7 +59,7 @@ class NubaseEntry {
     this.a,
     this.z,
     this.s,
-    this.isomerIndexChar,
+    this.isomerIndex,
     this.stateType,
     this.massExcess,
     this.massExcessUncertainty,
