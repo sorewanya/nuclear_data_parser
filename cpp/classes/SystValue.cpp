@@ -1,28 +1,30 @@
-#include <string>
+#include <string_view>
+#include <concepts>
 #include <optional>
 
 template <typename T>
 class SystValue
 {
 private:
-    std::optional<T> value;
-    bool isSystematic;
+    constexpr std::optional<T> value;
+    constexpr bool isSystematic;
 
 public:
-    SystValue(const std::optional<T> &val, bool systematic)
-        : value(val), isSystematic(systematic) {}
+    constexpr SystValue(std::optional<T> val, bool systematic) noexcept(std::is_nothrow_move_constructible_v<T>)
+        : value(std::move(val)), isSystematic(systematic) {}
 
-    std::optional<T> getValue() const
+    constexpr std::optional<T> getValue() const noexcept
     {
         return value;
     }
 
-    bool getIsSystematic() const
+    constexpr bool getIsSystematic() const noexcept
     {
+
         return isSystematic;
     }
 
-    std::string toString() const
+    constexpr std::string_view toString() const
     {
         if (value.has_value())
         {
@@ -38,4 +40,6 @@ public:
         }
         return "";
     }
+
+    constexpr bool operator==(const SystValue &) const = default;
 };

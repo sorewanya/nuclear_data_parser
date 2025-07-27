@@ -16,14 +16,14 @@ private:
 
 public:
     // Конструктор
-    SystValue(const std::optional<T> &val, bool systematic);
-
+    constexpr SystValue(std::optional<T> val, bool systematic) noexcept(std::is_nothrow_move_constructible_v<T>)
+        : value(std::move(val)), isSystematic(systematic);
     // Получение значения
-    std::optional<T> getValue() const;
+    constexpr std::optional<T> getValue() const;
 
     // Проверка, является ли значение систематическим
-    bool getIsSystematic() const;
+    constexpr bool getIsSystematic() const;
 
     // Преобразование в строку (аналог toString() в Dart)
-    std::string toString() const;
+    constexpr std::string toString() const;
 };

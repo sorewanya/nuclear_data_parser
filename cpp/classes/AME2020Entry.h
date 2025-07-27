@@ -6,34 +6,34 @@
 class AME2020Entry
 {
 private:
-    std::optional<int> nMinusZ;
-    int n;
-    int z;
-    int a;
-    std::string o;
-    SystValue<std::optional<double>> massExcess;
-    SystValue<std::optional<double>> massExcessUncertainty;
-    SystValue<std::optional<double>> bindingEnergyPerA;
-    SystValue<std::optional<double>> bindingEnergyPerAUncertainty;
-    std::string betaDecayType;
-    SystValue<std::optional<double>> betaDecayEnergy;
-    SystValue<std::optional<double>> betaDecayEnergyUncertainty;
-    SystValue<std::optional<double>> atomicMassMicroU;
-    SystValue<std::optional<double>> atomicMassUncertaintyMicroU;
+    const std::optional<int> nMinusZ;
+    const int n;
+    const int z;
+    const int a;
+    const std::string_view o;
+    const SystValue<std::optional<double>> massExcess;
+    const SystValue<std::optional<double>> massExcessUncertainty;
+    const SystValue<std::optional<double>> bindingEnergyPerA;
+    const SystValue<std::optional<double>> bindingEnergyPerAUncertainty;
+    const std::string_view betaDecayType;
+    const SystValue<std::optional<double>> betaDecayEnergy;
+    const SystValue<std::optional<double>> betaDecayEnergyUncertainty;
+    const SystValue<std::optional<double>> atomicMassMicroU;
+    const SystValue<std::optional<double>> atomicMassUncertaintyMicroU;
 
 public:
     // Конструктор
-    AME2020Entry(
+    constexpr AME2020Entry(
         const std::optional<int> &nMinusZ,
-        int n,
-        int z,
-        int a,
-        const std::string &o,
+        const int n,
+        const int z,
+        const int a,
+        const std::string_view &o,
         const SystValue<std::optional<double>> &massExcess,
         const SystValue<std::optional<double>> &massExcessUncertainty,
         const SystValue<std::optional<double>> &bindingEnergyPerA,
         const SystValue<std::optional<double>> &bindingEnergyPerAUncertainty,
-        const std::string &betaDecayType,
+        const std::string_view &betaDecayType,
         const SystValue<std::optional<double>> &betaDecayEnergy,
         const SystValue<std::optional<double>> &betaDecayEnergyUncertainty,
         const SystValue<std::optional<double>> &atomicMassMicroU,
@@ -49,12 +49,12 @@ public:
     int getN() const { return n; }
     int getZ() const { return z; }
     int getA() const { return a; }
-    std::string getO() const { return o; }
+    std::string_view getO() const { return o; }
     SystValue<std::optional<double>> getMassExcess() const { return massExcess; }
     SystValue<std::optional<double>> getMassExcessUncertainty() const { return massExcessUncertainty; }
     SystValue<std::optional<double>> getBindingEnergyPerA() const { return bindingEnergyPerA; }
     SystValue<std::optional<double>> getBindingEnergyPerAUncertainty() const { return bindingEnergyPerAUncertainty; }
-    std::string getBetaDecayType() const { return betaDecayType; }
+    std::string_view getBetaDecayType() const { return betaDecayType; }
     SystValue<std::optional<double>> getBetaDecayEnergy() const { return betaDecayEnergy; }
     SystValue<std::optional<double>> getBetaDecayEnergyUncertainty() const { return betaDecayEnergyUncertainty; }
     SystValue<std::optional<double>> getAtomicMassMicroU() const { return atomicMassMicroU; }

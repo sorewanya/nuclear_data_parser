@@ -5,82 +5,82 @@
 class NubaseEntry
 {
 private:
-    int a;
-    int z;
-    std::string s;
-    int isomerIndexChar;
-    SystValue<std::optional<double>> massExcess;
-    SystValue<std::optional<double>> massExcessUncertainty;
-    SystValue<std::optional<double>> excitationEnergy;
-    SystValue<std::optional<double>> excitationEnergyUncertainty;
-    std::string origin;
-    bool stbl;
-    bool pUnst;
-    std::string halfLife;
-    bool isHalfLifeSystematic;
-    std::string halfLifeUnit;
-    std::string halfLifeUncertainty;
-    std::string spinParity;
-    std::string spinParitySource;
-    std::string isospin;
-    std::string ensdfYear;
-    std::string discoveryYear;
-    std::string decayModes;
-    NuclideStateTypeEnum stateType = NuclideStateTypeEnum::UNKNOWN;
+    const int a;
+    const int z;
+    const std::string_view s;
+    const int isomerIndexChar;
+    const SystValue<std::optional<double>> massExcess;
+    const SystValue<std::optional<double>> massExcessUncertainty;
+    const SystValue<std::optional<double>> excitationEnergy;
+    const SystValue<std::optional<double>> excitationEnergyUncertainty;
+    const std::string_view origin;
+    const bool stbl;
+    const bool pUnst;
+    const std::string_view halfLife;
+    const bool isHalfLifeSystematic;
+    const std::string_view halfLifeUnit;
+    const std::string_view halfLifeUncertainty;
+    const std::string_view spinParity;
+    const std::string_view spinParitySource;
+    const std::string_view isospin;
+    const std::string_view ensdfYear;
+    const std::string_view discoveryYear;
+    const std::string_view decayModes;
+    const NuclideStateTypeEnum stateType = NuclideStateTypeEnum::UNKNOWN;
 
 public:
-    NubaseEntry(
-        int a, int z,
-        const std::string &s,
+    constexpr NubaseEntry(
+        const int a, int z,
+        const std::string_view &s,
         const int &isomerIndexChar,
-        NuclideStateTypeEnum stateType,
+        const NuclideStateTypeEnum stateType,
         const SystValue<std::optional<double>> &massExcess,
         const SystValue<std::optional<double>> &massExcessUncertainty,
         const SystValue<std::optional<double>> &excitationEnergy,
         const SystValue<std::optional<double>> &excitationEnergyUncertainty,
-        const std::string &origin,
-        bool stbl,
-        bool pUnst,
-        const std::string &halfLife,
-        bool isHalfLifeSystematic,
-        const std::string &halfLifeUnit,
-        const std::string &halfLifeUncertainty,
-        const std::string &spinParity,
-        const std::string &spinParitySource,
-        const std::string &isospin,
-        const std::string &ensdfYear,
-        const std::string &discoveryYear,
-        const std::string &decayModes) : a(a), z(z), s(s), isomerIndexChar(isomerIndexChar), stateType(stateType),
-                                         massExcess(massExcess), massExcessUncertainty(massExcessUncertainty),
-                                         excitationEnergy(excitationEnergy), excitationEnergyUncertainty(excitationEnergyUncertainty),
-                                         origin(origin), stbl(stbl), pUnst(pUnst), halfLife(halfLife),
-                                         isHalfLifeSystematic(isHalfLifeSystematic), halfLifeUnit(halfLifeUnit),
-                                         halfLifeUncertainty(halfLifeUncertainty), spinParity(spinParity),
-                                         spinParitySource(spinParitySource), isospin(isospin), ensdfYear(ensdfYear),
-                                         discoveryYear(discoveryYear), decayModes(decayModes) {}
+        const std::string_view &origin,
+        const bool stbl,
+        const bool pUnst,
+        const std::string_view &halfLife,
+        const bool isHalfLifeSystematic,
+        const std::string_view &halfLifeUnit,
+        const std::string_view &halfLifeUncertainty,
+        const std::string_view &spinParity,
+        const std::string_view &spinParitySource,
+        const std::string_view &isospin,
+        const std::string_view &ensdfYear,
+        const std::string_view &discoveryYear,
+        const std::string_view &decayModes) noexcept : a(a), z(z), s(s), isomerIndexChar(isomerIndexChar), stateType(stateType),
+                                                       massExcess(massExcess), massExcessUncertainty(massExcessUncertainty),
+                                                       excitationEnergy(excitationEnergy), excitationEnergyUncertainty(excitationEnergyUncertainty),
+                                                       origin(origin), stbl(stbl), pUnst(pUnst), halfLife(halfLife),
+                                                       isHalfLifeSystematic(isHalfLifeSystematic), halfLifeUnit(halfLifeUnit),
+                                                       halfLifeUncertainty(halfLifeUncertainty), spinParity(spinParity),
+                                                       spinParitySource(spinParitySource), isospin(isospin), ensdfYear(ensdfYear),
+                                                       discoveryYear(discoveryYear), decayModes(decayModes) {}
 
     // Геттеры
     int getA() const { return a; }
     int getZ() const { return z; }
-    std::string getS() const { return s; }
+    std::string_view getS() const { return s; }
     int getIsomerIndexChar() const { return isomerIndexChar; }
     SystValue<std::optional<double>> getMassExcess() const { return massExcess; }
     SystValue<std::optional<double>> getMassExcessUncertainty() const { return massExcessUncertainty; }
     SystValue<std::optional<double>> getExcitationEnergy() const { return excitationEnergy; }
     SystValue<std::optional<double>> getExcitationEnergyUncertainty() const { return excitationEnergyUncertainty; }
-    std::string getOrigin() const { return origin; }
+    std::string_view getOrigin() const { return origin; }
     bool isStbl() const { return stbl; }
     bool isPUnst() const { return pUnst; }
-    std::string getHalfLife() const { return halfLife; }
+    std::string_view getHalfLife() const { return halfLife; }
     bool getIsHalfLifeSystematic() const { return isHalfLifeSystematic; }
-    std::string getHalfLifeUnit() const { return halfLifeUnit; }
-    std::string getHalfLifeUncertainty() const { return halfLifeUncertainty; }
-    std::string getSpinParity() const { return spinParity; }
-    std::string getSpinParitySource() const { return spinParitySource; }
-    std::string getIsospin() const { return isospin; }
-    std::string getEnsdfYear() const { return ensdfYear; }
-    std::string getDiscoveryYear() const { return discoveryYear; }
-    std::string getDecayModes() const { return decayModes; }
+    std::string_view getHalfLifeUnit() const { return halfLifeUnit; }
+    std::string_view getHalfLifeUncertainty() const { return halfLifeUncertainty; }
+    std::string_view getSpinParity() const { return spinParity; }
+    std::string_view getSpinParitySource() const { return spinParitySource; }
+    std::string_view getIsospin() const { return isospin; }
+    std::string_view getEnsdfYear() const { return ensdfYear; }
+    std::string_view getDiscoveryYear() const { return discoveryYear; }
+    std::string_view getDecayModes() const { return decayModes; }
     NuclideStateTypeEnum getStateType() const { return stateType; }
 
     // Уникальный ключ для поиска данных из AME/RCT

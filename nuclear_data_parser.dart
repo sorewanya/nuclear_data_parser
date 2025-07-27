@@ -115,19 +115,19 @@ void main() async {
     "\nList<ReactionDataEntry> rctList=[",
   ];
   final outputLinesCppNubase = <String>[
-    "#include <vector>",
-    "#include <NubaseEntry.h>",
-    "\nstd::vector<NubaseEntry> nubaseList={",
+    '#include "SystValue.h"',
+    '#include "NubaseEntry.h"',
+    "\nstatic constexpr NubaseEntry nubaseList[] = {",
   ];
   final outputLinesCppAme = <String>[
-    "#include <vector>",
-    "#include <AME2020Entry.h>",
-    "\nstd::vector<AME2020Entry> ame2020List={",
+    '#include "SystValue.h"',
+    '#include "AME2020Entry.h"',
+    "\nstatic constexpr AME2020Entry ame2020List[] = {",
   ];
   final outputLinesCppRct = <String>[
-    "#include <vector>",
-    "#include <ReactionDataEntry.h>",
-    "\nstd::vector<ReactionDataEntry> rctList={",
+    '#include "SystValue.h"',
+    '#include "ReactionDataEntry.h"',
+    "\nstatic constexpr ReactionDataEntry rctList[] = {",
   ];
 
   /// Заголовок для CSV файла
@@ -382,7 +382,7 @@ void main() async {
 
     ///Cpp
     outputLinesCppNubase.add(
-      'NubaseEntry('
+      '{'
       '${nubaseEntry.a},'
       '${nubaseEntry.z},'
       '"${nubaseEntry.s}",'
@@ -405,11 +405,11 @@ void main() async {
       '"${nubaseEntry.ensdfYear}",'
       '"${nubaseEntry.discoveryYear}",'
       '"${nubaseEntry.decayModes}"'
-      '),',
+      '},',
     );
     if (ameEntry != null)
       outputLinesCppAme.add(
-        'AME2020Entry('
+        '{'
         '${ameEntry.nMinusZ},'
         '${ameEntry.n},'
         '${ameEntry.z},'
@@ -424,11 +424,11 @@ void main() async {
         "${parsedToCpp(ameEntry.betaDecayEnergyUncertainty)},"
         "${parsedToCpp(ameEntry.atomicMassMicroU)},"
         "${parsedToCpp(ameEntry.atomicMassUncertaintyMicroU)}"
-        '),',
+        '},',
       );
     if (rctEntry != null)
       outputLinesCppRct.add(
-        'ReactionDataEntry('
+        '{'
         '${nubaseEntry.a},'
         '${nubaseEntry.z},'
         '${parsedToCpp(rctEntry.s2n)},'
@@ -455,7 +455,7 @@ void main() async {
         '${parsedToCpp(rctEntry.qpaUncertainty)},'
         '${parsedToCpp(rctEntry.qna)},'
         '${parsedToCpp(rctEntry.qnaUncertainty)}'
-        '),',
+        '},',
       );
   }
   outputLinesDartNubase.add("];");

@@ -4,37 +4,37 @@
 class ReactionDataEntry
 {
 private:
-    int z;
-    int a;
+    const int z;
+    const int a;
 
-    SystValue<std::optional<double>> s2n;
-    SystValue<std::optional<double>> s2nUncertainty;
-    SystValue<std::optional<double>> s2p;
-    SystValue<std::optional<double>> s2pUncertainty;
-    SystValue<std::optional<double>> qa;
-    SystValue<std::optional<double>> qaUncertainty;
-    SystValue<std::optional<double>> q2b;
-    SystValue<std::optional<double>> q2bUncertainty;
-    SystValue<std::optional<double>> qep;
-    SystValue<std::optional<double>> qepUncertainty;
-    SystValue<std::optional<double>> qbn;
-    SystValue<std::optional<double>> qbnUncertainty;
+    const SystValue<std::optional<double>> s2n;
+    const SystValue<std::optional<double>> s2nUncertainty;
+    const SystValue<std::optional<double>> s2p;
+    const SystValue<std::optional<double>> s2pUncertainty;
+    const SystValue<std::optional<double>> qa;
+    const SystValue<std::optional<double>> qaUncertainty;
+    const SystValue<std::optional<double>> q2b;
+    const SystValue<std::optional<double>> q2bUncertainty;
+    const SystValue<std::optional<double>> qep;
+    const SystValue<std::optional<double>> qepUncertainty;
+    const SystValue<std::optional<double>> qbn;
+    const SystValue<std::optional<double>> qbnUncertainty;
 
-    SystValue<std::optional<double>> sn;
-    SystValue<std::optional<double>> snUncertainty;
-    SystValue<std::optional<double>> sp;
-    SystValue<std::optional<double>> spUncertainty;
-    SystValue<std::optional<double>> q4b;
-    SystValue<std::optional<double>> q4bUncertainty;
-    SystValue<std::optional<double>> qda;
-    SystValue<std::optional<double>> qdaUncertainty;
-    SystValue<std::optional<double>> qpa;
-    SystValue<std::optional<double>> qpaUncertainty;
-    SystValue<std::optional<double>> qna;
-    SystValue<std::optional<double>> qnaUncertainty;
+    const SystValue<std::optional<double>> sn;
+    const SystValue<std::optional<double>> snUncertainty;
+    const SystValue<std::optional<double>> sp;
+    const SystValue<std::optional<double>> spUncertainty;
+    const SystValue<std::optional<double>> q4b;
+    const SystValue<std::optional<double>> q4bUncertainty;
+    const SystValue<std::optional<double>> qda;
+    const SystValue<std::optional<double>> qdaUncertainty;
+    const SystValue<std::optional<double>> qpa;
+    const SystValue<std::optional<double>> qpaUncertainty;
+    const SystValue<std::optional<double>> qna;
+    const SystValue<std::optional<double>> qnaUncertainty;
 
 public:
-    ReactionDataEntry(
+    constexpr ReactionDataEntry(
         int z, int a,
         const SystValue<std::optional<double>> &s2n,
         const SystValue<std::optional<double>> &s2nUncertainty,
