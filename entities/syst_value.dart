@@ -2,11 +2,11 @@
 /// указывающего, было ли оно получено на основе систематических закономерностей(from systematic) (#).
 ///
 /// Helper class to store a value and a flag indicating whether it was obtained from systematic (#).
-class ParsedValue<T> {
+class SystValue<T> {
   final T? value;
   final bool isSystematic;
 
-  ParsedValue(this.value, this.isSystematic);
+  SystValue(this.value, this.isSystematic);
 
   @override
   String toString() {

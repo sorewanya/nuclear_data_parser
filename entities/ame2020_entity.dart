@@ -1,5 +1,5 @@
 import 'elements_enum.dart';
-import 'parsed_value.dart';
+import 'syst_value.dart';
 
 /// Класс для хранения данных об оценке атомных масс из одной строки файла mass.mas20.
 ///
@@ -10,15 +10,15 @@ class AME2020Entry {
   final int z;
   final int a;
   final String o;
-  final ParsedValue<double?> massExcess;
-  final ParsedValue<double?> massExcessUncertainty;
-  final ParsedValue<double?> bindingEnergyPerA;
-  final ParsedValue<double?> bindingEnergyPerAUncertainty;
+  final SystValue<double?> massExcess;
+  final SystValue<double?> massExcessUncertainty;
+  final SystValue<double?> bindingEnergyPerA;
+  final SystValue<double?> bindingEnergyPerAUncertainty;
   final String betaDecayType;
-  final ParsedValue<double?> betaDecayEnergy;
-  final ParsedValue<double?> betaDecayEnergyUncertainty;
-  final ParsedValue<double?> atomicMassMicroU;
-  final ParsedValue<double?> atomicMassUncertaintyMicroU;
+  final SystValue<double?> betaDecayEnergy;
+  final SystValue<double?> betaDecayEnergyUncertainty;
+  final SystValue<double?> atomicMassMicroU;
+  final SystValue<double?> atomicMassUncertaintyMicroU;
   AME2020Entry.required(
     this.nMinusZ,
     this.n,

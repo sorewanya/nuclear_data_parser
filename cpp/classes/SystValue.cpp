@@ -2,14 +2,14 @@
 #include <optional>
 
 template <typename T>
-class ParsedValue
+class SystValue
 {
 private:
     std::optional<T> value;
     bool isSystematic;
 
 public:
-    ParsedValue(const std::optional<T> &val, bool systematic)
+    SystValue(const std::optional<T> &val, bool systematic)
         : value(val), isSystematic(systematic) {}
 
     std::optional<T> getValue() const

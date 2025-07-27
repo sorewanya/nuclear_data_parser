@@ -1,17 +1,17 @@
-import '../entities/parsed_value.dart';
+import '../entities/syst_value.dart';
 
-/// Вспомогательная функция для генерации CSV полей из ParsedValue.
-List<String> parsedToCsv(ParsedValue? pv) {
+/// Вспомогательная функция для генерации CSV полей из SystValue.
+List<String> parsedToCsv(SystValue? pv) {
   if (pv == null) return ['""', '""'];
   return ['"${pv.value?.toString() ?? ""}"', pv.isSystematic ? '"#"' : '""'];
 }
 
-String parsedToDart(ParsedValue<double?>? pv) {
-  if (pv == null) return 'ParsedValue<double?>(null,false)';
-  return 'ParsedValue<double?>(${pv.value?.toString() ?? "null"},${pv.isSystematic})';
+String parsedToDart(SystValue<double?>? pv) {
+  if (pv == null) return 'SystValue<double?>(null,false)';
+  return 'SystValue<double?>(${pv.value?.toString() ?? "null"},${pv.isSystematic})';
 }
 
-String parsedToCpp(ParsedValue<double?>? pv) {
-  if (pv == null) return 'ParsedValue<std::optional<double>>(std::nullopt,false)';
-  return 'ParsedValue<std::optional<double>>(${pv.value?.toString() ?? "std::nullopt"},${pv.isSystematic})';
+String parsedToCpp(SystValue<double?>? pv) {
+  if (pv == null) return 'SystValue<std::optional<double>>(std::nullopt,false)';
+  return 'SystValue<std::optional<double>>(${pv.value?.toString() ?? "std::nullopt"},${pv.isSystematic})';
 }

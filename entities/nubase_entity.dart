@@ -1,5 +1,5 @@
 import 'nuclide_state_type_enum.dart';
-import 'parsed_value.dart';
+import 'syst_value.dart';
 
 /// Класс для хранения данных из файла NUBASE2020.
 class NubaseEntry {
@@ -11,10 +11,10 @@ class NubaseEntry {
   final String s; // s column (m, n, p, q, etc.)
   /// Isomer_Index - i=0 (gs); i=1,2 (isomers); i=3,4 (levels); i=5 (resonance); i=8,9 (IAS)
   final int isomerIndex; // The 'i' part of ZZZi
-  final ParsedValue<double?> massExcess;
-  final ParsedValue<double?> massExcessUncertainty;
-  final ParsedValue<double?> excitationEnergy;
-  final ParsedValue<double?> excitationEnergyUncertainty;
+  final SystValue<double?> massExcess;
+  final SystValue<double?> massExcessUncertainty;
+  final SystValue<double?> excitationEnergy;
+  final SystValue<double?> excitationEnergyUncertainty;
   final String origin; //Origin of Excitation Energy
   final bool stbl; // entry is stable
   final bool pUnst; // entry is p-unst

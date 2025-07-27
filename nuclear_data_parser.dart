@@ -97,20 +97,20 @@ void main() async {
   final outputLinesWithoutUnc = <String>[];
   final outputLinesDartNubase = <String>[
     "// dart format width=9999",
-    "import '../../entities/parsed_value.dart';",
+    "import '../../entities/syst_value.dart';",
     "import '../../entities/nubase_entity.dart';",
     "import '../../entities/nuclide_state_type_enum.dart';",
     "\nList<NubaseEntry> nubaseList=[",
   ];
   final outputLinesDartAme = <String>[
     "// dart format width=9999",
-    "import '../../entities/parsed_value.dart';",
+    "import '../../entities/syst_value.dart';",
     "import '../../entities/ame2020_entity.dart';",
     "\nList<AME2020Entry> ame2020List=[",
   ];
   final outputLinesDartRct = <String>[
     "// dart format width=9999",
-    "import '../../entities/parsed_value.dart';",
+    "import '../../entities/syst_value.dart';",
     "import '../../entities/reaction_data_entity.dart';",
     "\nList<ReactionDataEntry> rctList=[",
   ];

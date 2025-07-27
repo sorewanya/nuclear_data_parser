@@ -1,4 +1,4 @@
-import 'parsed_value.dart';
+import 'syst_value.dart';
 
 /// Класс для хранения данных о реакциях и энергиях разделения из файлов rct.
 ///
@@ -17,18 +17,18 @@ class ReactionDataEntry {
   /// Q(2B-)	Q₂ᵦ⁻	Q-значение двойного β⁻-распада (Q-value for double β⁻ decay)
   /// Q(ep)	Qₑₚ	Q-значение электронного захвата с испусканием протона (ϵp capture Q-value)
   /// Q(B- n)	Qᵦ⁻ₙ	Q-значение β⁻-запаздывающего нейтронного распада (β⁻-delayed neutron emission)
-  ParsedValue<double?>? s2n;
-  ParsedValue<double?>? s2nUncertainty;
-  ParsedValue<double?>? s2p;
-  ParsedValue<double?>? s2pUncertainty;
-  ParsedValue<double?>? qa;
-  ParsedValue<double?>? qaUncertainty;
-  ParsedValue<double?>? q2b;
-  ParsedValue<double?>? q2bUncertainty;
-  ParsedValue<double?>? qep;
-  ParsedValue<double?>? qepUncertainty;
-  ParsedValue<double?>? qbn;
-  ParsedValue<double?>? qbnUncertainty;
+  SystValue<double?>? s2n;
+  SystValue<double?>? s2nUncertainty;
+  SystValue<double?>? s2p;
+  SystValue<double?>? s2pUncertainty;
+  SystValue<double?>? qa;
+  SystValue<double?>? qaUncertainty;
+  SystValue<double?>? q2b;
+  SystValue<double?>? q2bUncertainty;
+  SystValue<double?>? qep;
+  SystValue<double?>? qepUncertainty;
+  SystValue<double?>? qbn;
+  SystValue<double?>? qbnUncertainty;
 
   /// from rct2_1.mas20.txt
   /// S(n)	Sₙ	Энергия разделения одного нейтрона (One-neutron separation energy)
@@ -37,18 +37,18 @@ class ReactionDataEntry {
   /// Q(d,a)	Q(d,α)	Q-значение реакции (d,α) — дейтронного захвата с испусканием α-частицы
   /// Q(p,a)	Q(p,α)	Q-значение реакции (p,α) — протонного захвата с испусканием α-частицы
   /// Q(n,a)	Q(n,α)	Q-значение реакции (n,α) — нейтронного захвата с испусканием α-частицы
-  ParsedValue<double?>? sn;
-  ParsedValue<double?>? snUncertainty;
-  ParsedValue<double?>? sp;
-  ParsedValue<double?>? spUncertainty;
-  ParsedValue<double?>? q4b;
-  ParsedValue<double?>? q4bUncertainty;
-  ParsedValue<double?>? qda;
-  ParsedValue<double?>? qdaUncertainty;
-  ParsedValue<double?>? qpa;
-  ParsedValue<double?>? qpaUncertainty;
-  ParsedValue<double?>? qna;
-  ParsedValue<double?>? qnaUncertainty;
+  SystValue<double?>? sn;
+  SystValue<double?>? snUncertainty;
+  SystValue<double?>? sp;
+  SystValue<double?>? spUncertainty;
+  SystValue<double?>? q4b;
+  SystValue<double?>? q4bUncertainty;
+  SystValue<double?>? qda;
+  SystValue<double?>? qdaUncertainty;
+  SystValue<double?>? qpa;
+  SystValue<double?>? qpaUncertainty;
+  SystValue<double?>? qna;
+  SystValue<double?>? qnaUncertainty;
 
   ReactionDataEntry({required this.z, required this.a});
   ReactionDataEntry.required(

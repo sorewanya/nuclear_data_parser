@@ -1,14 +1,14 @@
-import '../entities/parsed_value.dart';
+import '../entities/syst_value.dart';
 
 /// Вспомогательная функция для парсинга числовых значений из файла.
 /// Обрабатывает значения, полученные из систематики ('#') и отсутствующие значения ('*').
 ///
 /// Helper function for parsing numeric values from a file.
 /// Handles values obtained from taxonomy ('#') and missing values ('*').
-ParsedValue<double?> parseDouble(String text, [bool nubase = false]) {
+SystValue<double?> parseDouble(String text, [bool nubase = false]) {
   final trimmed = text.trim();
   if (trimmed.isEmpty || trimmed == '*') {
-    return ParsedValue(null, false);
+    return SystValue(null, false);
   }
   final isSystematic = trimmed.contains('#');
 
@@ -20,5 +20,5 @@ ParsedValue<double?> parseDouble(String text, [bool nubase = false]) {
   final parsable = nubase
       ? trimmed.replaceAll(RegExp(r'[^\d\.\-\+]'), '')
       : trimmed.replaceAll('#', '.').replaceAll(RegExp(r'[^\d\.\-\+]'), '');
-  return ParsedValue(double.tryParse(parsable), isSystematic);
+  return SystValue(double.tryParse(parsable), isSystematic);
 }

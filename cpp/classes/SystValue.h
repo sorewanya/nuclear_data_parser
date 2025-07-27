@@ -8,7 +8,7 @@
  * Helper class to store a value and a flag indicating whether it was obtained from systematic (#).
  */
 template <typename T>
-class ParsedValue
+class SystValue
 {
 private:
     std::optional<T> value;
@@ -16,7 +16,7 @@ private:
 
 public:
     // Конструктор
-    ParsedValue(const std::optional<T> &val, bool systematic);
+    SystValue(const std::optional<T> &val, bool systematic);
 
     // Получение значения
     std::optional<T> getValue() const;
