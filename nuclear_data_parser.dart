@@ -100,6 +100,7 @@ void main() async {
     "import '../../entities/syst_value.dart';",
     "import '../../entities/nubase_entity.dart';",
     "import '../../entities/nuclide_state_type_enum.dart';",
+    "import '../../entities/spin.dart';",
     "\nList<NubaseEntry> nubaseList=[",
   ];
   final outputLinesDartAme = <String>[
@@ -117,6 +118,7 @@ void main() async {
   final outputLinesCppNubase = <String>[
     '#include "SystValue.h"',
     '#include "NubaseEntry.h"',
+    '#include "Spin.h"',
     "\nstatic constexpr NubaseEntry nubaseList[] = {",
   ];
   final outputLinesCppAme = <String>[
@@ -163,7 +165,7 @@ void main() async {
       'Origin',
       'Stable_Element', 'p-unst', 'HalfLife_Val', 'HalfLife_Unit',
       if (withUnc) 'HalfLife_Unc',
-      'HalfLife_Syst', 'Jpi', 'Jpi_Source', 'Isospin', 'Decay_Modes',
+      'HalfLife_Syst', 'Jpi', 'Jpi_Systematics', 'Jpi_Directly_Measured', 'Isospin', 'Decay_Modes',
       'Discovery_Year',
 
       /// AME (Atomic Mass Evaluation)
@@ -254,13 +256,14 @@ void main() async {
       if (withUnc) ...parsedToCsv(nubaseEntry.excitationEnergyUncertainty),
       '"${nubaseEntry.origin}"',
       '"${nubaseEntry.stbl ? "#" : ""}"',
-      '"${nubaseEntry.halfLife}"',
+      '"${nubaseEntry.halfLife?.value}"',
       '"${nubaseEntry.halfLifeUnit}"',
       if (withUnc) '"${nubaseEntry.halfLifeUncertainty}"',
-      nubaseEntry.isHalfLifeSystematic ? '"#"' : '""',
-      '"${nubaseEntry.spinParity}"',
-      '"${nubaseEntry.spinParitySource}"',
-      '"${nubaseEntry.isospin}"',
+      nubaseEntry.halfLife?.isSystematic == true ? '"#"' : '""',
+      '"${nubaseEntry.spin?.spin?.value}"',
+      '"${nubaseEntry.spin?.spin?.isSystematic}"',
+      '"${nubaseEntry.spin?.directlyMeasured}"',
+      '"${nubaseEntry.spin?.isospin}"',
       '"${nubaseEntry.decayModes}"',
       '"${nubaseEntry.discoveryYear}"',
       // AME
@@ -317,16 +320,13 @@ void main() async {
       '${nubaseEntry.origin != null ? '"${nubaseEntry.origin}"' : 'null'},'
       '${nubaseEntry.stbl},'
       '${nubaseEntry.pUnst},'
-      '"${nubaseEntry.halfLife}",'
-      '${nubaseEntry.isHalfLifeSystematic},'
-      '"${nubaseEntry.halfLifeUnit}",'
-      '"${nubaseEntry.halfLifeUncertainty}",'
-      '"${nubaseEntry.spinParity}",'
-      '"${nubaseEntry.spinParitySource}",'
-      '"${nubaseEntry.isospin}",'
-      '"${nubaseEntry.ensdfYear}",'
-      '"${nubaseEntry.discoveryYear}",'
-      '"${nubaseEntry.decayModes}"'
+      '${parsedToDartString(nubaseEntry.halfLife)},'
+      '${nubaseEntry.halfLifeUnit != null ? '"${nubaseEntry.halfLifeUnit}"' : 'null'},'
+      '${nubaseEntry.halfLifeUncertainty != null ? '"${nubaseEntry.halfLifeUncertainty}"' : 'null'},'
+      '${spinToDart(nubaseEntry.spin)},'
+      '${nubaseEntry.ensdfYear},'
+      '${nubaseEntry.discoveryYear},'
+      '${nubaseEntry.decayModes != null ? '"${nubaseEntry.decayModes}"' : 'null'}'
       '),',
     );
     if (ameEntry != null)
@@ -385,26 +385,23 @@ void main() async {
       '{'
       '${nubaseEntry.a},'
       '${nubaseEntry.z},'
-      '"${nubaseEntry.s}",'
+      '${nubaseEntry.s != null ? '"${nubaseEntry.s}"' : 'std::nullopt'},'
       '${nubaseEntry.isomerIndex},'
       '${nubaseEntry.stateType.toString().replaceFirst(".", "::")},'
       '${parsedToCpp(nubaseEntry.massExcess)},'
       '${parsedToCpp(nubaseEntry.massExcessUncertainty)},'
       '${parsedToCpp(nubaseEntry.excitationEnergy)},'
       '${parsedToCpp(nubaseEntry.excitationEnergyUncertainty)},'
-      '"${nubaseEntry.origin}",'
+      '${nubaseEntry.origin != null ? '"${nubaseEntry.origin}"' : 'std::nullopt'},'
       '${nubaseEntry.stbl},'
       '${nubaseEntry.pUnst},'
-      '"${nubaseEntry.halfLife}",'
-      '${nubaseEntry.isHalfLifeSystematic},'
-      '"${nubaseEntry.halfLifeUnit}",'
-      '"${nubaseEntry.halfLifeUncertainty}",'
-      '"${nubaseEntry.spinParity}",'
-      '"${nubaseEntry.spinParitySource}",'
-      '"${nubaseEntry.isospin}",'
-      '"${nubaseEntry.ensdfYear}",'
-      '"${nubaseEntry.discoveryYear}",'
-      '"${nubaseEntry.decayModes}"'
+      '${parsedToCppString(nubaseEntry.halfLife)},'
+      '${nubaseEntry.halfLifeUnit != null ? '"${nubaseEntry.halfLifeUnit}"' : 'std::nullopt'},'
+      '${nubaseEntry.halfLifeUncertainty != null ? '"${nubaseEntry.halfLifeUncertainty}"' : 'std::nullopt'},'
+      '${spinToCpp(nubaseEntry.spin)},'
+      '${nubaseEntry.ensdfYear != null ? nubaseEntry.ensdfYear : 'std::nullopt'},'
+      '${nubaseEntry.discoveryYear},'
+      '${nubaseEntry.decayModes != null ? '"${nubaseEntry.decayModes}"' : 'std::nullopt'}'
       '},',
     );
     if (ameEntry != null)

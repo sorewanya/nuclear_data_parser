@@ -1,43 +1,33 @@
 import 'dart:io';
 
 import '../entities/nubase_entity.dart';
+import '../entities/spin.dart';
+import '../entities/syst_value.dart';
 import 'log_if_null.dart';
 import 'parse_double.dart';
 import 'safe_string.dart';
-
-/// Вспомогательный класс для хранения разобранной информации о спине.
-class _SpinInfo {
-  final String value;
-  final String source;
-  _SpinInfo(this.value, this.source);
-}
 
 NubaseEntry NubaseEntryFromLine(String line) {
   final _isospinRegex = RegExp(r'T=([\d./\s]+)');
 
   /// Извлекает значение изоспина из поля Jpi.
-  String _parseIsospin(String jpiRaw) {
+  String? _parseIsospin(String jpiRaw) {
     final match = _isospinRegex.firstMatch(jpiRaw);
-    return match?.group(1)?.trim() ?? '';
+    return match?.group(1)?.trim();
   }
 
-  /// Извлекает значение спина/чётности и источника, удаляя информацию об изоспине.
-  _SpinInfo _parseSpinParityAndSource(String jpiRaw) {
+  Spin _parseSpinParityAndSource(String jpiRaw) {
     var temp = jpiRaw.replaceAll(_isospinRegex, '').trim();
-    String source = '';
 
-    if (temp.endsWith('*')) {
-      source = '*';
-      temp = temp.substring(0, temp.length - 1).trim();
-    } else if (temp.endsWith('#')) {
-      source = '#';
+    if (temp.endsWith('*') || temp.endsWith('#')) {
       temp = temp.substring(0, temp.length - 1).trim();
     }
-    return _SpinInfo(temp, source);
+    final isospin = _parseIsospin(jpiRaw);
+    return Spin(SystValue(temp, jpiRaw.contains("#")), jpiRaw.contains("*"), isospin);
   }
 
   final jpiRaw = line.safeSubstring(88, 102);
-  final spinInfo = _parseSpinParityAndSource(jpiRaw);
+  final spin = _parseSpinParityAndSource(jpiRaw);
   final halfLifeSubstring = line.safeSubstring(69, 78);
   final zzzi = line.safeSubstring(4, 8).trim();
 
@@ -49,6 +39,13 @@ NubaseEntry NubaseEntryFromLine(String line) {
   final isomerIndex = int.tryParse(zzzi.isNotEmpty ? zzzi.substring(zzzi.length - 1) : '');
   if (isomerIndex == null) logNull("isomerIndex");
   final origin = line.safeSubstring(65, 67).trim();
+  final halfLife = halfLifeSubstring.trim().replaceAll('#', '').replaceAll('stbl', '').replaceAll('p-unst', '');
+  final halfLifeUnit = line.safeSubstring(78, 80).trim();
+  final halfLifeUncertainty = line.safeSubstring(81, 88).trim();
+  final ensdfYear = int.tryParse(line.safeSubstring(102, 104).trim());
+  final discoveryYear = int.tryParse(line.safeSubstring(114, 118).trim());
+  if (discoveryYear == null) logNull("discoveryYear");
+  final decayModes = line.safeSubstring(119).trim();
 
   return NubaseEntry(
     a: a ?? 0,
@@ -62,16 +59,13 @@ NubaseEntry NubaseEntryFromLine(String line) {
     origin: origin.isEmpty ? null : origin,
     stbl: halfLifeSubstring.contains('stbl'),
     pUnst: halfLifeSubstring.contains('p-unst'),
-    halfLife: halfLifeSubstring.trim().replaceAll('#', '').replaceAll('stbl', '').replaceAll('p-unst', ''),
-    isHalfLifeSystematic: halfLifeSubstring.contains('#'),
-    halfLifeUnit: line.safeSubstring(78, 80).trim(),
-    halfLifeUncertainty: line.safeSubstring(81, 88).trim(),
-    spinParity: spinInfo.value,
-    spinParitySource: spinInfo.source,
-    isospin: _parseIsospin(jpiRaw),
-    ensdfYear: line.safeSubstring(102, 104).trim(),
-    discoveryYear: line.safeSubstring(114, 118).trim(),
-    decayModes: line.safeSubstring(119).trim(),
+    halfLife: halfLife.isEmpty ? null : SystValue(halfLife, halfLifeSubstring.contains('#')),
+    halfLifeUnit: halfLifeUnit.isEmpty ? null : halfLifeUnit,
+    halfLifeUncertainty: halfLifeUncertainty.isEmpty ? null : halfLifeUncertainty,
+    spin: spin,
+    ensdfYear: ensdfYear,
+    discoveryYear: discoveryYear ?? 0,
+    decayModes: decayModes.isEmpty ? null : decayModes,
   );
 }
 

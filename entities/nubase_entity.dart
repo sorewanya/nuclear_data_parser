@@ -1,4 +1,5 @@
 import 'nuclide_state_type_enum.dart';
+import 'spin.dart';
 import 'syst_value.dart';
 
 /// Класс для хранения данных из файла NUBASE2020.
@@ -18,16 +19,13 @@ class NubaseEntry {
   final String? origin; //Origin of Excitation Energy
   final bool stbl; // entry is stable
   final bool pUnst; // entry is p-unst
-  final String halfLife;
-  final bool isHalfLifeSystematic;
-  final String halfLifeUnit;
-  final String halfLifeUncertainty;
-  final String spinParity;
-  final String spinParitySource;
-  final String isospin;
-  final String ensdfYear;
-  final String discoveryYear;
-  final String decayModes;
+  final SystValue<String>? halfLife;
+  final String? halfLifeUnit;
+  final String? halfLifeUncertainty;
+  final Spin? spin;
+  final int? ensdfYear;
+  final int discoveryYear;
+  final String? decayModes;
 
   // This field will be populated after parsing, using context from other nuclides.
   NuclideStateTypeEnum stateType = NuclideStateTypeEnum.UNKNOWN;
@@ -45,12 +43,9 @@ class NubaseEntry {
     required this.stbl,
     required this.pUnst,
     required this.halfLife,
-    required this.isHalfLifeSystematic,
     required this.halfLifeUnit,
     required this.halfLifeUncertainty,
-    required this.spinParity,
-    required this.spinParitySource,
-    required this.isospin,
+    required this.spin,
     required this.ensdfYear,
     required this.discoveryYear,
     required this.decayModes,
@@ -69,12 +64,9 @@ class NubaseEntry {
     this.stbl,
     this.pUnst,
     this.halfLife,
-    this.isHalfLifeSystematic,
     this.halfLifeUnit,
     this.halfLifeUncertainty,
-    this.spinParity,
-    this.spinParitySource,
-    this.isospin,
+    this.spin,
     this.ensdfYear,
     this.discoveryYear,
     this.decayModes,
