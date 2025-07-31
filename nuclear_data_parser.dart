@@ -184,6 +184,7 @@ void main() async {
       'Binding_Energy_per_A_keV', 'Binding_Energy_per_A_Syst',
       if (withUnc) 'Binding_Energy_per_A_Unc',
       if (withUnc) 'Binding_Energy_per_A_Unc_Syst',
+      'beta_Decay_B-',
       'Beta_Decay_Energy_keV', 'Beta_Decay_Energy_Syst',
       if (withUnc) 'Beta_Decay_Energy_Unc',
       if (withUnc) 'Beta_Decay_Energy_Unc_Syst',
@@ -271,6 +272,7 @@ void main() async {
       if (withUnc) ...parsedToCsv(ameEntry?.massExcessUncertainty),
       ...parsedToCsv(ameEntry?.bindingEnergyPerA),
       if (withUnc) ...parsedToCsv(ameEntry?.bindingEnergyPerAUncertainty),
+      '"${ameEntry?.betaDecayBMinus == true ? '#' : ''}"',
       ...parsedToCsv(ameEntry?.betaDecayEnergy),
       if (withUnc) ...parsedToCsv(ameEntry?.betaDecayEnergyUncertainty),
       ...parsedToCsv(ameEntry?.atomicMassMicroU),
@@ -336,12 +338,12 @@ void main() async {
         '${ameEntry.n},'
         '${ameEntry.z},'
         '${ameEntry.a},'
-        '"${ameEntry.o}",'
+        '${ameEntry.o != null ? '"${ameEntry.o}"' : 'null'},'
         "${parsedToDart(ameEntry.massExcess)},"
         "${parsedToDart(ameEntry.massExcessUncertainty)},"
         "${parsedToDart(ameEntry.bindingEnergyPerA)},"
         "${parsedToDart(ameEntry.bindingEnergyPerAUncertainty)},"
-        '"${ameEntry.betaDecayType}",'
+        '${ameEntry.betaDecayBMinus},'
         "${parsedToDart(ameEntry.betaDecayEnergy)},"
         "${parsedToDart(ameEntry.betaDecayEnergyUncertainty)},"
         "${parsedToDart(ameEntry.atomicMassMicroU)},"
@@ -411,12 +413,12 @@ void main() async {
         '${ameEntry.n},'
         '${ameEntry.z},'
         '${ameEntry.a},'
-        '"${ameEntry.o}",'
+        '${ameEntry.o != null ? '"${ameEntry.o}"' : 'std::nullopt'},'
         "${parsedToCpp(ameEntry.massExcess)},"
         "${parsedToCpp(ameEntry.massExcessUncertainty)},"
         "${parsedToCpp(ameEntry.bindingEnergyPerA)},"
         "${parsedToCpp(ameEntry.bindingEnergyPerAUncertainty)},"
-        '"${ameEntry.betaDecayType}",'
+        '${ameEntry.betaDecayBMinus},'
         "${parsedToCpp(ameEntry.betaDecayEnergy)},"
         "${parsedToCpp(ameEntry.betaDecayEnergyUncertainty)},"
         "${parsedToCpp(ameEntry.atomicMassMicroU)},"

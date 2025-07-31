@@ -24,8 +24,7 @@ AME2020Entry AME2020EntryFromLine(String rawLine) {
   if (bindingEnergyPerA == null) logNull("bindingEnergyPerA");
   final bindingEnergyPerAUncertainty = parseDouble(rawLine.safeSubstring(68, 78));
   if (bindingEnergyPerAUncertainty == null) logNull("bindingEnergyPerAUncertainty");
-  final betaDecayType = rawLine.safeSubstring(79, 81).trim();
-  if (betaDecayType == "") logNull("betaDecayType");
+  final betaDecayType = rawLine.safeSubstring(79, 81).trim() == "B-";
   final atomicMassMicroU = parseDouble(rawLine.safeSubstring(106, 123).trim());
   if (atomicMassMicroU == null) logNull("atomicMassMicroU");
   final atomicMassUncertaintyMicroU = parseDouble(rawLine.safeSubstring(123));
@@ -41,7 +40,7 @@ AME2020Entry AME2020EntryFromLine(String rawLine) {
     massExcessUncertainty: massExcessUncertainty ?? SystValue(0, true),
     bindingEnergyPerA: bindingEnergyPerA ?? SystValue(0, true),
     bindingEnergyPerAUncertainty: bindingEnergyPerAUncertainty ?? SystValue(0, true),
-    betaDecayType: betaDecayType,
+    betaDecayBMinus: betaDecayType,
     betaDecayEnergy: parseDouble(rawLine.safeSubstring(81, 94)),
     betaDecayEnergyUncertainty: parseDouble(rawLine.safeSubstring(94, 105)),
     atomicMassMicroU: atomicMassMicroU ?? SystValue(0, true),

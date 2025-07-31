@@ -14,7 +14,7 @@ class AME2020Entry {
   final SystValue<double> massExcessUncertainty;
   final SystValue<double> bindingEnergyPerA;
   final SystValue<double> bindingEnergyPerAUncertainty;
-  final String betaDecayType; //TODO convert to enum
+  final bool betaDecayBMinus;
   final SystValue<double>? betaDecayEnergy;
   final SystValue<double>? betaDecayEnergyUncertainty;
   final SystValue<double> atomicMassMicroU;
@@ -29,7 +29,7 @@ class AME2020Entry {
     this.massExcessUncertainty,
     this.bindingEnergyPerA,
     this.bindingEnergyPerAUncertainty,
-    this.betaDecayType,
+    this.betaDecayBMinus,
     this.betaDecayEnergy,
     this.betaDecayEnergyUncertainty,
     this.atomicMassMicroU,
@@ -46,7 +46,7 @@ class AME2020Entry {
     required this.massExcessUncertainty,
     required this.bindingEnergyPerA,
     required this.bindingEnergyPerAUncertainty,
-    required this.betaDecayType,
+    required this.betaDecayBMinus,
     required this.betaDecayEnergy,
     required this.betaDecayEnergyUncertainty,
     required this.atomicMassMicroU,
