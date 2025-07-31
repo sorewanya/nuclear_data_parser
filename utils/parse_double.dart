@@ -5,10 +5,10 @@ import '../entities/syst_value.dart';
 ///
 /// Helper function for parsing numeric values from a file.
 /// Handles values obtained from taxonomy ('#') and missing values ('*').
-SystValue<double?> parseDouble(String text, [bool nubase = false]) {
+SystValue<double>? parseDouble(String text, [bool nubase = false]) {
   final trimmed = text.trim();
   if (trimmed.isEmpty || trimmed == '*') {
-    return SystValue(null, false);
+    return null;
   }
   final isSystematic = trimmed.contains('#');
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import '../entities/nubase_entity.dart';
+import 'log_if_null.dart';
 import 'parse_double.dart';
 import 'safe_string.dart';
 
@@ -40,16 +41,25 @@ NubaseEntry NubaseEntryFromLine(String line) {
   final halfLifeSubstring = line.safeSubstring(69, 78);
   final zzzi = line.safeSubstring(4, 8).trim();
 
+  final a = int.tryParse(line.safeSubstring(0, 4));
+  if (a == null) logNull("a");
+  final z = int.tryParse(line.safeSubstring(4, 7));
+  if (z == null) logNull("z");
+  final s = line.safeSubstring(16, 17).trim();
+  final isomerIndex = int.tryParse(zzzi.isNotEmpty ? zzzi.substring(zzzi.length - 1) : '');
+  if (isomerIndex == null) logNull("isomerIndex");
+  final origin = line.safeSubstring(65, 67).trim();
+
   return NubaseEntry(
-    a: int.parse(line.safeSubstring(0, 4)),
-    z: int.parse(line.safeSubstring(4, 7)),
-    s: line.safeSubstring(16, 17).trim(),
-    isomerIndex: int.tryParse(zzzi.isNotEmpty ? zzzi.substring(zzzi.length - 1) : '') ?? 0,
+    a: a ?? 0,
+    z: z ?? 0,
+    s: s.isEmpty ? null : s,
+    isomerIndex: isomerIndex ?? 0,
     massExcess: parseDouble(line.safeSubstring(18, 31).trim()),
     massExcessUncertainty: parseDouble(line.safeSubstring(31, 42).trim()),
     excitationEnergy: parseDouble(line.safeSubstring(42, 54).trim()),
     excitationEnergyUncertainty: parseDouble(line.safeSubstring(54, 65).trim()),
-    origin: line.safeSubstring(65, 67).trim(),
+    origin: origin.isEmpty ? null : origin,
     stbl: halfLifeSubstring.contains('stbl'),
     pUnst: halfLifeSubstring.contains('p-unst'),
     halfLife: halfLifeSubstring.trim().replaceAll('#', '').replaceAll('stbl', '').replaceAll('p-unst', ''),

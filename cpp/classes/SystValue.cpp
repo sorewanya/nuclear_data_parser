@@ -6,14 +6,14 @@ template <typename T>
 class SystValue
 {
 private:
-    constexpr std::optional<T> value;
+    constexpr T value;
     constexpr bool isSystematic;
 
 public:
-    constexpr SystValue(std::optional<T> val, bool systematic) noexcept(std::is_nothrow_move_constructible_v<T>)
+    constexpr SystValue(T val, bool systematic) noexcept(std::is_nothrow_move_constructible_v<T>)
         : value(std::move(val)), isSystematic(systematic) {}
 
-    constexpr std::optional<T> getValue() const noexcept
+    constexpr T getValue() const noexcept
     {
         return value;
     }

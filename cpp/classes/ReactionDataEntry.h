@@ -7,59 +7,59 @@ private:
     const int z;
     const int a;
 
-    const SystValue<std::optional<double>> s2n;
-    const SystValue<std::optional<double>> s2nUncertainty;
-    const SystValue<std::optional<double>> s2p;
-    const SystValue<std::optional<double>> s2pUncertainty;
-    const SystValue<std::optional<double>> qa;
-    const SystValue<std::optional<double>> qaUncertainty;
-    const SystValue<std::optional<double>> q2b;
-    const SystValue<std::optional<double>> q2bUncertainty;
-    const SystValue<std::optional<double>> qep;
-    const SystValue<std::optional<double>> qepUncertainty;
-    const SystValue<std::optional<double>> qbn;
-    const SystValue<std::optional<double>> qbnUncertainty;
+    const std::optional<SystValue<double>> s2n;
+    const std::optional<SystValue<double>> s2nUncertainty;
+    const std::optional<SystValue<double>> s2p;
+    const std::optional<SystValue<double>> s2pUncertainty;
+    const std::optional<SystValue<double>> qa;
+    const std::optional<SystValue<double>> qaUncertainty;
+    const std::optional<SystValue<double>> q2b;
+    const std::optional<SystValue<double>> q2bUncertainty;
+    const std::optional<SystValue<double>> qep;
+    const std::optional<SystValue<double>> qepUncertainty;
+    const std::optional<SystValue<double>> qbn;
+    const std::optional<SystValue<double>> qbnUncertainty;
 
-    const SystValue<std::optional<double>> sn;
-    const SystValue<std::optional<double>> snUncertainty;
-    const SystValue<std::optional<double>> sp;
-    const SystValue<std::optional<double>> spUncertainty;
-    const SystValue<std::optional<double>> q4b;
-    const SystValue<std::optional<double>> q4bUncertainty;
-    const SystValue<std::optional<double>> qda;
-    const SystValue<std::optional<double>> qdaUncertainty;
-    const SystValue<std::optional<double>> qpa;
-    const SystValue<std::optional<double>> qpaUncertainty;
-    const SystValue<std::optional<double>> qna;
-    const SystValue<std::optional<double>> qnaUncertainty;
+    const std::optional<SystValue<double>> sn;
+    const std::optional<SystValue<double>> snUncertainty;
+    const std::optional<SystValue<double>> sp;
+    const std::optional<SystValue<double>> spUncertainty;
+    const std::optional<SystValue<double>> q4b;
+    const std::optional<SystValue<double>> q4bUncertainty;
+    const std::optional<SystValue<double>> qda;
+    const std::optional<SystValue<double>> qdaUncertainty;
+    const std::optional<SystValue<double>> qpa;
+    const std::optional<SystValue<double>> qpaUncertainty;
+    const std::optional<SystValue<double>> qna;
+    const std::optional<SystValue<double>> qnaUncertainty;
 
 public:
     constexpr ReactionDataEntry(
         int z, int a,
-        const SystValue<std::optional<double>> &s2n,
-        const SystValue<std::optional<double>> &s2nUncertainty,
-        const SystValue<std::optional<double>> &s2p,
-        const SystValue<std::optional<double>> &s2pUncertainty,
-        const SystValue<std::optional<double>> &qa,
-        const SystValue<std::optional<double>> &qaUncertainty,
-        const SystValue<std::optional<double>> &q2b,
-        const SystValue<std::optional<double>> &q2bUncertainty,
-        const SystValue<std::optional<double>> &qep,
-        const SystValue<std::optional<double>> &qepUncertainty,
-        const SystValue<std::optional<double>> &qbn,
-        const SystValue<std::optional<double>> &qbnUncertainty,
-        const SystValue<std::optional<double>> &sn,
-        const SystValue<std::optional<double>> &snUncertainty,
-        const SystValue<std::optional<double>> &sp,
-        const SystValue<std::optional<double>> &spUncertainty,
-        const SystValue<std::optional<double>> &q4b,
-        const SystValue<std::optional<double>> &q4bUncertainty,
-        const SystValue<std::optional<double>> &qda,
-        const SystValue<std::optional<double>> &qdaUncertainty,
-        const SystValue<std::optional<double>> &qpa,
-        const SystValue<std::optional<double>> &qpaUncertainty,
-        const SystValue<std::optional<double>> &qna,
-        const SystValue<std::optional<double>> &qnaUncertainty) : z(z), a(a),
+        const std::optional<SystValue<double>> &s2n,
+        const std::optional<SystValue<double>> &s2nUncertainty,
+        const std::optional<SystValue<double>> &s2p,
+        const std::optional<SystValue<double>> &s2pUncertainty,
+        const std::optional<SystValue<double>> &qa,
+        const std::optional<SystValue<double>> &qaUncertainty,
+        const std::optional<SystValue<double>> &q2b,
+        const std::optional<SystValue<double>> &q2bUncertainty,
+        const std::optional<SystValue<double>> &qep,
+        const std::optional<SystValue<double>> &qepUncertainty,
+        const std::optional<SystValue<double>> &qbn,
+        const std::optional<SystValue<double>> &qbnUncertainty,
+        const std::optional<SystValue<double>> &sn,
+        const std::optional<SystValue<double>> &snUncertainty,
+        const std::optional<SystValue<double>> &sp,
+        const std::optional<SystValue<double>> &spUncertainty,
+        const std::optional<SystValue<double>> &q4b,
+        const std::optional<SystValue<double>> &q4bUncertainty,
+        const std::optional<SystValue<double>> &qda,
+        const std::optional<SystValue<double>> &qdaUncertainty,
+        const std::optional<SystValue<double>> &qpa,
+        const std::optional<SystValue<double>> &qpaUncertainty,
+        const std::optional<SystValue<double>> &qna,
+        const std::optional<SystValue<double>> &qnaUncertainty) : z(z), a(a),
                                                                   s2n(s2n), s2nUncertainty(s2nUncertainty),
                                                                   s2p(s2p), s2pUncertainty(s2pUncertainty),
                                                                   qa(qa), qaUncertainty(qaUncertainty),
@@ -76,29 +76,29 @@ public:
     int getZ() const { return z; }
     int getA() const { return a; }
 
-    SystValue<std::optional<double>> gets2n() const { return s2n; };
-    SystValue<std::optional<double>> gets2nUncertainty() const { return s2nUncertainty; };
-    SystValue<std::optional<double>> gets2p() const { return s2p; };
-    SystValue<std::optional<double>> gets2pUncertainty() const { return s2pUncertainty; };
-    SystValue<std::optional<double>> getqa() const { return qa; };
-    SystValue<std::optional<double>> getqaUncertainty() const { return qaUncertainty; };
-    SystValue<std::optional<double>> getq2b() const { return q2b; };
-    SystValue<std::optional<double>> getq2bUncertainty() const { return q2bUncertainty; };
-    SystValue<std::optional<double>> getqep() const { return qep; };
-    SystValue<std::optional<double>> getqepUncertainty() const { return qepUncertainty; };
-    SystValue<std::optional<double>> getqbn() const { return qbn; };
-    SystValue<std::optional<double>> getqbnUncertainty() const { return qbnUncertainty; };
+    std::optional<SystValue<double>> gets2n() const { return s2n; };
+    std::optional<SystValue<double>> gets2nUncertainty() const { return s2nUncertainty; };
+    std::optional<SystValue<double>> gets2p() const { return s2p; };
+    std::optional<SystValue<double>> gets2pUncertainty() const { return s2pUncertainty; };
+    std::optional<SystValue<double>> getqa() const { return qa; };
+    std::optional<SystValue<double>> getqaUncertainty() const { return qaUncertainty; };
+    std::optional<SystValue<double>> getq2b() const { return q2b; };
+    std::optional<SystValue<double>> getq2bUncertainty() const { return q2bUncertainty; };
+    std::optional<SystValue<double>> getqep() const { return qep; };
+    std::optional<SystValue<double>> getqepUncertainty() const { return qepUncertainty; };
+    std::optional<SystValue<double>> getqbn() const { return qbn; };
+    std::optional<SystValue<double>> getqbnUncertainty() const { return qbnUncertainty; };
 
-    SystValue<std::optional<double>> getsn() const { return sn; };
-    SystValue<std::optional<double>> getsnUncertainty() const { return snUncertainty; };
-    SystValue<std::optional<double>> getsp() const { return sp; };
-    SystValue<std::optional<double>> getspUncertainty() const { return spUncertainty; };
-    SystValue<std::optional<double>> getq4b() const { return q4b; };
-    SystValue<std::optional<double>> getq4bUncertainty() const { return q4bUncertainty; };
-    SystValue<std::optional<double>> getqda() const { return qda; };
-    SystValue<std::optional<double>> getqdaUncertainty() const { return qdaUncertainty; };
-    SystValue<std::optional<double>> getqpa() const { return qpa; };
-    SystValue<std::optional<double>> getqpaUncertainty() const { return qpaUncertainty; };
-    SystValue<std::optional<double>> getqna() const { return qna; };
-    SystValue<std::optional<double>> getqnaUncertainty() const { return qnaUncertainty; };
+    std::optional<SystValue<double>> getsn() const { return sn; };
+    std::optional<SystValue<double>> getsnUncertainty() const { return snUncertainty; };
+    std::optional<SystValue<double>> getsp() const { return sp; };
+    std::optional<SystValue<double>> getspUncertainty() const { return spUncertainty; };
+    std::optional<SystValue<double>> getq4b() const { return q4b; };
+    std::optional<SystValue<double>> getq4bUncertainty() const { return q4bUncertainty; };
+    std::optional<SystValue<double>> getqda() const { return qda; };
+    std::optional<SystValue<double>> getqdaUncertainty() const { return qdaUncertainty; };
+    std::optional<SystValue<double>> getqpa() const { return qpa; };
+    std::optional<SystValue<double>> getqpaUncertainty() const { return qpaUncertainty; };
+    std::optional<SystValue<double>> getqna() const { return qna; };
+    std::optional<SystValue<double>> getqnaUncertainty() const { return qnaUncertainty; };
 };

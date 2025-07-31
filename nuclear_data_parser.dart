@@ -307,14 +307,14 @@ void main() async {
       'NubaseEntry.required('
       '${nubaseEntry.a},'
       '${nubaseEntry.z},'
-      '"${nubaseEntry.s}",'
+      '${nubaseEntry.s != null ? '"${nubaseEntry.s}"' : 'null'},'
       '${nubaseEntry.isomerIndex},'
       '${nubaseEntry.stateType},'
       '${parsedToDart(nubaseEntry.massExcess)},'
       '${parsedToDart(nubaseEntry.massExcessUncertainty)},'
       '${parsedToDart(nubaseEntry.excitationEnergy)},'
       '${parsedToDart(nubaseEntry.excitationEnergyUncertainty)},'
-      '"${nubaseEntry.origin}",'
+      '${nubaseEntry.origin != null ? '"${nubaseEntry.origin}"' : 'null'},'
       '${nubaseEntry.stbl},'
       '${nubaseEntry.pUnst},'
       '"${nubaseEntry.halfLife}",'
@@ -476,5 +476,7 @@ void main() async {
   outputCppAme.writeAsStringSync(outputLinesCppAme.join('\n'));
   outputCppRct.writeAsStringSync(outputLinesCppRct.join('\n'));
 
-  print('Обработка завершена. Результат записан в файлы: ${outputFile.path}, ${outputFileWithoutUnc.path}');
+  print(
+    'Обработка завершена. Результат записан в папке `output`.\nParsing completed. Result written to `output` folder',
+  );
 }

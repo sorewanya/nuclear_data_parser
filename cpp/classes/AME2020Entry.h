@@ -11,15 +11,15 @@ private:
     const int z;
     const int a;
     const std::string_view o;
-    const SystValue<std::optional<double>> massExcess;
-    const SystValue<std::optional<double>> massExcessUncertainty;
-    const SystValue<std::optional<double>> bindingEnergyPerA;
-    const SystValue<std::optional<double>> bindingEnergyPerAUncertainty;
+    const std::optional<SystValue<double>> massExcess;
+    const std::optional<SystValue<double>> massExcessUncertainty;
+    const std::optional<SystValue<double>> bindingEnergyPerA;
+    const std::optional<SystValue<double>> bindingEnergyPerAUncertainty;
     const std::string_view betaDecayType;
-    const SystValue<std::optional<double>> betaDecayEnergy;
-    const SystValue<std::optional<double>> betaDecayEnergyUncertainty;
-    const SystValue<std::optional<double>> atomicMassMicroU;
-    const SystValue<std::optional<double>> atomicMassUncertaintyMicroU;
+    const std::optional<SystValue<double>> betaDecayEnergy;
+    const std::optional<SystValue<double>> betaDecayEnergyUncertainty;
+    const std::optional<SystValue<double>> atomicMassMicroU;
+    const std::optional<SystValue<double>> atomicMassUncertaintyMicroU;
 
 public:
     // Конструктор
@@ -29,15 +29,15 @@ public:
         const int z,
         const int a,
         const std::string_view &o,
-        const SystValue<std::optional<double>> &massExcess,
-        const SystValue<std::optional<double>> &massExcessUncertainty,
-        const SystValue<std::optional<double>> &bindingEnergyPerA,
-        const SystValue<std::optional<double>> &bindingEnergyPerAUncertainty,
+        const std::optional<SystValue<double>> &massExcess,
+        const std::optional<SystValue<double>> &massExcessUncertainty,
+        const std::optional<SystValue<double>> &bindingEnergyPerA,
+        const std::optional<SystValue<double>> &bindingEnergyPerAUncertainty,
         const std::string_view &betaDecayType,
-        const SystValue<std::optional<double>> &betaDecayEnergy,
-        const SystValue<std::optional<double>> &betaDecayEnergyUncertainty,
-        const SystValue<std::optional<double>> &atomicMassMicroU,
-        const SystValue<std::optional<double>> &atomicMassUncertaintyMicroU) : nMinusZ(nMinusZ), n(n), z(z), a(a), o(o),
+        const std::optional<SystValue<double>> &betaDecayEnergy,
+        const std::optional<SystValue<double>> &betaDecayEnergyUncertainty,
+        const std::optional<SystValue<double>> &atomicMassMicroU,
+        const std::optional<SystValue<double>> &atomicMassUncertaintyMicroU) : nMinusZ(nMinusZ), n(n), z(z), a(a), o(o),
                                                                                massExcess(massExcess), massExcessUncertainty(massExcessUncertainty),
                                                                                bindingEnergyPerA(bindingEnergyPerA), bindingEnergyPerAUncertainty(bindingEnergyPerAUncertainty),
                                                                                betaDecayType(betaDecayType), betaDecayEnergy(betaDecayEnergy),
@@ -50,15 +50,15 @@ public:
     int getZ() const { return z; }
     int getA() const { return a; }
     std::string_view getO() const { return o; }
-    SystValue<std::optional<double>> getMassExcess() const { return massExcess; }
-    SystValue<std::optional<double>> getMassExcessUncertainty() const { return massExcessUncertainty; }
-    SystValue<std::optional<double>> getBindingEnergyPerA() const { return bindingEnergyPerA; }
-    SystValue<std::optional<double>> getBindingEnergyPerAUncertainty() const { return bindingEnergyPerAUncertainty; }
+    std::optional<SystValue<double>> getMassExcess() const { return massExcess; }
+    std::optional<SystValue<double>> getMassExcessUncertainty() const { return massExcessUncertainty; }
+    std::optional<SystValue<double>> getBindingEnergyPerA() const { return bindingEnergyPerA; }
+    std::optional<SystValue<double>> getBindingEnergyPerAUncertainty() const { return bindingEnergyPerAUncertainty; }
     std::string_view getBetaDecayType() const { return betaDecayType; }
-    SystValue<std::optional<double>> getBetaDecayEnergy() const { return betaDecayEnergy; }
-    SystValue<std::optional<double>> getBetaDecayEnergyUncertainty() const { return betaDecayEnergyUncertainty; }
-    SystValue<std::optional<double>> getAtomicMassMicroU() const { return atomicMassMicroU; }
-    SystValue<std::optional<double>> getAtomicMassUncertaintyMicroU() const { return atomicMassUncertaintyMicroU; }
+    std::optional<SystValue<double>> getBetaDecayEnergy() const { return betaDecayEnergy; }
+    std::optional<SystValue<double>> getBetaDecayEnergyUncertainty() const { return betaDecayEnergyUncertainty; }
+    std::optional<SystValue<double>> getAtomicMassMicroU() const { return atomicMassMicroU; }
+    std::optional<SystValue<double>> getAtomicMassUncertaintyMicroU() const { return atomicMassUncertaintyMicroU; }
 
     // Метод toString()
     std::string toString() const
@@ -73,11 +73,14 @@ public:
         {
             return val.has_value() ? std::to_string(val.value()) : "null";
         };
+        std::string result = "A=" + std::to_string(a) +
+                             ", Z=" + std::to_string(z) +
+                             ", El=" + elementName;
+        if (massExcess.has_value())
+            result.append(optionalToStr(massExcess.value().getValue()));
+        if (atomicMassMicroU.has_value())
+            result.append(optionalToStr(atomicMassMicroU.value().getValue()));
 
-        return "A=" + std::to_string(a) +
-               ", Z=" + std::to_string(z) +
-               ", El=" + elementName +
-               ", Mass Excess: " + optionalToStr(massExcess.getValue().value()) + " keV" +
-               ", Atomic Mass: " + optionalToStr(atomicMassMicroU.getValue().value()) + " micro-u";
+        return result;
     }
 };

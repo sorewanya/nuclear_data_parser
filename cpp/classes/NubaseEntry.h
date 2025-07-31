@@ -9,10 +9,10 @@ private:
     const int z;
     const std::string_view s;
     const int isomerIndexChar;
-    const SystValue<std::optional<double>> massExcess;
-    const SystValue<std::optional<double>> massExcessUncertainty;
-    const SystValue<std::optional<double>> excitationEnergy;
-    const SystValue<std::optional<double>> excitationEnergyUncertainty;
+    const std::optional<SystValue<double>> massExcess;
+    const std::optional<SystValue<double>> massExcessUncertainty;
+    const std::optional<SystValue<double>> excitationEnergy;
+    const std::optional<SystValue<double>> excitationEnergyUncertainty;
     const std::string_view origin;
     const bool stbl;
     const bool pUnst;
@@ -34,10 +34,10 @@ public:
         const std::string_view &s,
         const int &isomerIndexChar,
         const NuclideStateTypeEnum stateType,
-        const SystValue<std::optional<double>> &massExcess,
-        const SystValue<std::optional<double>> &massExcessUncertainty,
-        const SystValue<std::optional<double>> &excitationEnergy,
-        const SystValue<std::optional<double>> &excitationEnergyUncertainty,
+        const std::optional<SystValue<double>> &massExcess,
+        const std::optional<SystValue<double>> &massExcessUncertainty,
+        const std::optional<SystValue<double>> &excitationEnergy,
+        const std::optional<SystValue<double>> &excitationEnergyUncertainty,
         const std::string_view &origin,
         const bool stbl,
         const bool pUnst,
@@ -64,10 +64,10 @@ public:
     int getZ() const { return z; }
     std::string_view getS() const { return s; }
     int getIsomerIndexChar() const { return isomerIndexChar; }
-    SystValue<std::optional<double>> getMassExcess() const { return massExcess; }
-    SystValue<std::optional<double>> getMassExcessUncertainty() const { return massExcessUncertainty; }
-    SystValue<std::optional<double>> getExcitationEnergy() const { return excitationEnergy; }
-    SystValue<std::optional<double>> getExcitationEnergyUncertainty() const { return excitationEnergyUncertainty; }
+    std::optional<SystValue<double>> getMassExcess() const { return massExcess; }
+    std::optional<SystValue<double>> getMassExcessUncertainty() const { return massExcessUncertainty; }
+    std::optional<SystValue<double>> getExcitationEnergy() const { return excitationEnergy; }
+    std::optional<SystValue<double>> getExcitationEnergyUncertainty() const { return excitationEnergyUncertainty; }
     std::string_view getOrigin() const { return origin; }
     bool isStbl() const { return stbl; }
     bool isPUnst() const { return pUnst; }

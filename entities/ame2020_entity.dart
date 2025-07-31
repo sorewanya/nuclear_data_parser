@@ -5,20 +5,20 @@ import 'syst_value.dart';
 ///
 /// Class for storing atomic mass estimate data from one line of mass.mas20 file.
 class AME2020Entry {
-  final int? nMinusZ;
+  final int nMinusZ;
   final int n;
   final int z;
   final int a;
-  final String o;
-  final SystValue<double?> massExcess;
-  final SystValue<double?> massExcessUncertainty;
-  final SystValue<double?> bindingEnergyPerA;
-  final SystValue<double?> bindingEnergyPerAUncertainty;
-  final String betaDecayType;
-  final SystValue<double?> betaDecayEnergy;
-  final SystValue<double?> betaDecayEnergyUncertainty;
-  final SystValue<double?> atomicMassMicroU;
-  final SystValue<double?> atomicMassUncertaintyMicroU;
+  final String? o;
+  final SystValue<double> massExcess;
+  final SystValue<double> massExcessUncertainty;
+  final SystValue<double> bindingEnergyPerA;
+  final SystValue<double> bindingEnergyPerAUncertainty;
+  final String betaDecayType; //TODO convert to enum
+  final SystValue<double>? betaDecayEnergy;
+  final SystValue<double>? betaDecayEnergyUncertainty;
+  final SystValue<double> atomicMassMicroU;
+  final SystValue<double> atomicMassUncertaintyMicroU;
   AME2020Entry.required(
     this.nMinusZ,
     this.n,

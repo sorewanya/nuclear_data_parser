@@ -7,11 +7,11 @@ List<String> parsedToCsv(SystValue? pv) {
 }
 
 String parsedToDart(SystValue<double?>? pv) {
-  if (pv == null) return 'SystValue<double?>(null,false)';
-  return 'SystValue<double?>(${pv.value?.toString() ?? "null"},${pv.isSystematic})';
+  if (pv == null || pv.value == null) return 'null';
+  return 'SystValue<double>(${pv.value.toString()},${pv.isSystematic})';
 }
 
 String parsedToCpp(SystValue<double?>? pv) {
-  if (pv == null) return 'SystValue<std::optional<double>>(std::nullopt,false)';
-  return 'SystValue<std::optional<double>>(${pv.value?.toString() ?? "std::nullopt"},${pv.isSystematic})';
+  if (pv == null || pv.value == null) return 'std::nullopt';
+  return 'SystValue<double>(${pv.value.toString()},${pv.isSystematic})';
 }

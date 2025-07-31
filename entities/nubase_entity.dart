@@ -8,14 +8,14 @@ class NubaseEntry {
 
   /// Z - протонный номер.
   final int z;
-  final String s; // s column (m, n, p, q, etc.)
+  final String? s; // s column (m, n, p, q, etc.) //TODO make enum
   /// Isomer_Index - i=0 (gs); i=1,2 (isomers); i=3,4 (levels); i=5 (resonance); i=8,9 (IAS)
   final int isomerIndex; // The 'i' part of ZZZi
-  final SystValue<double?> massExcess;
-  final SystValue<double?> massExcessUncertainty;
-  final SystValue<double?> excitationEnergy;
-  final SystValue<double?> excitationEnergyUncertainty;
-  final String origin; //Origin of Excitation Energy
+  final SystValue<double>? massExcess;
+  final SystValue<double>? massExcessUncertainty;
+  final SystValue<double>? excitationEnergy;
+  final SystValue<double>? excitationEnergyUncertainty;
+  final String? origin; //Origin of Excitation Energy
   final bool stbl; // entry is stable
   final bool pUnst; // entry is p-unst
   final String halfLife;
