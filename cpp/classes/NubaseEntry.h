@@ -74,10 +74,4 @@ public:
     int getDiscoveryYear() const { return discoveryYear; }
     std::optional<std::string_view> getDecayModes() const { return decayModes; }
     NuclideStateTypeEnum getStateType() const { return stateType; }
-
-    // Уникальный ключ для поиска данных из AME/RCT
-    std::string getAmeKey() const
-    {
-        return std::to_string(a) + "-" + std::to_string(z);
-    }
 };

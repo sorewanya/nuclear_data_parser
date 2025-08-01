@@ -72,7 +72,4 @@ class NubaseEntry {
     this.discoveryYear,
     this.decayModes,
   );
-
-  /// Уникальный ключ для поиска данных из AME/RCT.
-  String get ameKey => '$a-$z';
 }

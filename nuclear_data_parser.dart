@@ -240,7 +240,7 @@ void main() async {
   outputLinesWithoutUnc.add(getcsvOutputTopic(false));
 
   for (final nubaseEntry in nubaseEntries) {
-    final key = nubaseEntry.ameKey;
+    final key = '${nubaseEntry.a}-${nubaseEntry.z}';
     final ameEntry = nubaseEntry.isomerIndex == 0 ? ameDataMap[key] : null;
     final rctEntry = nubaseEntry.isomerIndex == 0 ? reactionDataMap[key] : null;
 
