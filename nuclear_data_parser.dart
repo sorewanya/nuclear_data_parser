@@ -101,6 +101,7 @@ void main() async {
     "import '../../entities/nubase_entity.dart';",
     "import '../../entities/nuclide_state_type_enum.dart';",
     "import '../../entities/spin.dart';",
+    "import '../../entities/s_enum.dart';",
     "\nList<NubaseEntry> nubaseList=[",
   ];
   final outputLinesDartAme = <String>[
@@ -119,6 +120,7 @@ void main() async {
     '#include "SystValue.h"',
     '#include "NubaseEntry.h"',
     '#include "Spin.h"',
+    '#include "SEnum.h"',
     "\nstatic constexpr NubaseEntry nubaseList[] = {",
   ];
   final outputLinesCppAme = <String>[
@@ -249,7 +251,7 @@ void main() async {
       '"${nubaseEntry.z}"',
       '"${ElementsEnum.values[nubaseEntry.z]}"',
       '"${nubaseEntry.isomerIndex}"',
-      '"${nubaseEntry.s}"',
+      '"${nubaseEntry.s?.name}"',
       '"${nubaseEntry.stateType.name}"',
       ...parsedToCsv(nubaseEntry.massExcess),
       if (withUnc) ...parsedToCsv(nubaseEntry.massExcessUncertainty),
@@ -312,7 +314,7 @@ void main() async {
       'NubaseEntry.required('
       '${nubaseEntry.a},'
       '${nubaseEntry.z},'
-      '${nubaseEntry.s != null ? '"${nubaseEntry.s}"' : 'null'},'
+      '${nubaseEntry.s != null ? 'SEnum.${nubaseEntry.s!.name}' : 'null'},'
       '${nubaseEntry.isomerIndex},'
       '${nubaseEntry.stateType},'
       '${parsedToDart(nubaseEntry.massExcess)},'
@@ -387,7 +389,7 @@ void main() async {
       '{'
       '${nubaseEntry.a},'
       '${nubaseEntry.z},'
-      '${nubaseEntry.s != null ? '"${nubaseEntry.s}"' : 'std::nullopt'},'
+      '${nubaseEntry.s != null ? 'SEnum::${nubaseEntry.s!.name}' : 'std::nullopt'},'
       '${nubaseEntry.isomerIndex},'
       '${nubaseEntry.stateType.toString().replaceFirst(".", "::")},'
       '${parsedToCpp(nubaseEntry.massExcess)},'

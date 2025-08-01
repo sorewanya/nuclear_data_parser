@@ -1,4 +1,5 @@
 import 'nuclide_state_type_enum.dart';
+import 's_enum.dart';
 import 'spin.dart';
 import 'syst_value.dart';
 
@@ -9,7 +10,7 @@ class NubaseEntry {
 
   /// Z - протонный номер.
   final int z;
-  final String? s; // s column (m, n, p, q, etc.) //TODO make enum
+  final SEnum? s; // s column (m, n, p, q, etc.)
   /// Isomer_Index - i=0 (gs); i=1,2 (isomers); i=3,4 (levels); i=5 (resonance); i=8,9 (IAS)
   final int isomerIndex; // The 'i' part of ZZZi
   final SystValue<double>? massExcess;

@@ -2,13 +2,14 @@
 #include "SystValue.h"
 #include "NuclideStateTypeEnum.h"
 #include "Spin.h"
+#include "SEnum.h"
 
 class NubaseEntry
 {
 private:
     const int a;
     const int z;
-    const std::optional<std::string_view> s;
+    const std::optional<SEnum> s;
     const int isomerIndexChar;
     const std::optional<SystValue<double>> massExcess;
     const std::optional<SystValue<double>> massExcessUncertainty;
@@ -29,7 +30,7 @@ private:
 public:
     constexpr NubaseEntry(
         const int a, int z,
-        const std::optional<std::string_view> &s,
+        const std::optional<SEnum> &s,
         const int &isomerIndexChar,
         const NuclideStateTypeEnum stateType,
         const std::optional<SystValue<double>> &massExcess,
@@ -56,7 +57,7 @@ public:
     // Геттеры
     int getA() const { return a; }
     int getZ() const { return z; }
-    std::optional<std::string_view> getS() const { return s; }
+    std::optional<SEnum> getS() const { return s; }
     int getIsomerIndexChar() const { return isomerIndexChar; }
     std::optional<SystValue<double>> getMassExcess() const { return massExcess; }
     std::optional<SystValue<double>> getMassExcessUncertainty() const { return massExcessUncertainty; }

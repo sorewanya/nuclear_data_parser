@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import '../entities/nubase_entity.dart';
+import '../entities/s_enum.dart';
 import '../entities/spin.dart';
 import '../entities/syst_value.dart';
 import 'log_if_null.dart';
@@ -50,7 +51,7 @@ NubaseEntry NubaseEntryFromLine(String line) {
   return NubaseEntry(
     a: a ?? 0,
     z: z ?? 0,
-    s: s.isEmpty ? null : s,
+    s: s.isEmpty ? null : SEnum.fromString(s),
     isomerIndex: isomerIndex ?? 0,
     massExcess: parseDouble(line.safeSubstring(18, 31).trim()),
     massExcessUncertainty: parseDouble(line.safeSubstring(31, 42).trim()),
