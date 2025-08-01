@@ -27,13 +27,14 @@ NubaseEntry NubaseEntryFromLine(String line) {
     return Spin(SystValue(temp, jpiRaw.contains("#")), jpiRaw.contains("*"), isospin);
   }
 
-  final jpiRaw = line.safeSubstring(88, 102);
-  final spin = _parseSpinParityAndSource(jpiRaw);
   final halfLifeSubstring = line.safeSubstring(69, 78);
   final zzzi = line.safeSubstring(4, 8).trim();
 
   final a = int.tryParse(line.safeSubstring(0, 4));
   if (a == null) logNull("a");
+  final jpiRaw = (a == 11 && zzzi == "0058")
+      ? line.safeSubstring(88, 102) + line.safeSubstring(81, 88).trim()
+      : line.safeSubstring(88, 102);
   final z = int.tryParse(line.safeSubstring(4, 7));
   if (z == null) logNull("z");
   final s = line.safeSubstring(16, 17).trim();
@@ -42,7 +43,8 @@ NubaseEntry NubaseEntryFromLine(String line) {
   final origin = line.safeSubstring(65, 67).trim();
   final halfLife = halfLifeSubstring.trim().replaceAll('#', '').replaceAll('stbl', '').replaceAll('p-unst', '');
   final halfLifeUnit = line.safeSubstring(78, 80).trim();
-  final halfLifeUncertainty = line.safeSubstring(81, 88).trim();
+  final halfLifeUncertainty = (a == 11 && zzzi == "0058") ? "" : line.safeSubstring(81, 88).trim();
+  final spin = _parseSpinParityAndSource(jpiRaw);
   final ensdfYear = int.tryParse(line.safeSubstring(102, 104).trim());
   final discoveryYear = int.tryParse(line.safeSubstring(114, 118).trim());
   if (discoveryYear == null) logNull("discoveryYear");
